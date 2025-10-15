@@ -4,10 +4,10 @@ import { useEffect, useMemo, useState } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { Save, Plus, Trash2, IndianRupee, Percent, Tag } from "lucide-react";
+import { Save, Plus, IndianRupee, Percent, Tag } from "lucide-react";
 import Layout from "../../components/Layout";
 import { pricingAPI, apiHelper } from "../../services/apiService";
-import toast from 'react-hot-toast';
+import toast from "react-hot-toast";
 
 const DEFAULT_TIERS = [
   { label: "0-2 km", price: 25 },
@@ -16,6 +16,7 @@ const DEFAULT_TIERS = [
   { label: "4-6 km", price: 45 },
 ];
 
+// ✅ Validation schema update
 const schema = yup
   .object({
     gstPercent: yup
@@ -24,6 +25,12 @@ const schema = yup
       .min(0, "GST cannot be negative")
       .max(100, "GST cannot exceed 100%")
       .required("GST is required"),
+    serviceChargePercent: yup
+      .number()
+      .typeError("Service charge must be a number")
+      .min(0, "Service charge cannot be negative")
+      .max(100, "Service charge cannot exceed 100%")
+      .required("Service charge is required"),
     boxPrice: yup
       .number()
       .typeError("Price for one box must be a number")
@@ -58,11 +65,15 @@ export default function PricesPage() {
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
-    defaultValues: { gstPercent: 3, boxPrice: 25, tiers: DEFAULT_TIERS },
+    defaultValues: {
+      gstPercent: 3,
+      serviceChargePercent: 2,
+      boxPrice: 25,
+      tiers: DEFAULT_TIERS,
+    },
   });
 
-  const { fields, append, remove } = useFieldArray({ control, name: "tiers" });
-
+  const { fields, append } = useFieldArray({ control, name: "tiers" });
   const formValues = watch();
 
   useEffect(() => {
@@ -71,62 +82,34 @@ export default function PricesPage() {
       try {
         setIsFetching(true);
         const response = await pricingAPI.getPricing();
-        console.log('API Response:', response);
         const data = apiHelper.handleResponse(response);
-        console.log('Processed data:', data);
-        
+
         if (!isMounted) return;
 
-        // More flexible data handling - check for different possible structures
         let normalized = {
           gstPercent: 3,
+          serviceChargePercent: 2,
           boxPrice: 25,
           tiers: DEFAULT_TIERS,
         };
 
-        // Try to extract data from different possible response structures
         if (data) {
-          // Check if data has the expected structure
-          if (typeof data.gstPercent === "number") {
-            normalized.gstPercent = data.gstPercent;
-          }
-          if (typeof data.boxPrice === "number") {
-            normalized.boxPrice = data.boxPrice;
-          }
-          if (Array.isArray(data.tiers) && data.tiers.length > 0) {
-            normalized.tiers = data.tiers;
-          }
-          
-          // Check if data is directly the pricing object
+          if (typeof data.gstPercent === "number") normalized.gstPercent = data.gstPercent;
+          if (typeof data.serviceChargePercent === "number") normalized.serviceChargePercent = data.serviceChargePercent;
+          if (typeof data.boxPrice === "number") normalized.boxPrice = data.boxPrice;
+          if (Array.isArray(data.tiers) && data.tiers.length > 0) normalized.tiers = data.tiers;
+
           if (data.pricing) {
-            if (typeof data.pricing.gstPercent === "number") {
-              normalized.gstPercent = data.pricing.gstPercent;
-            }
-            if (typeof data.pricing.boxPrice === "number") {
-              normalized.boxPrice = data.pricing.boxPrice;
-            }
-            if (Array.isArray(data.pricing.tiers) && data.pricing.tiers.length > 0) {
-              normalized.tiers = data.pricing.tiers;
-            }
-          }
-          
-          // Check if data has individual fields at root level
-          if (data.gst && typeof data.gst === "number") {
-            normalized.gstPercent = data.gst;
-          }
-          if (data.price && typeof data.price === "number") {
-            normalized.boxPrice = data.price;
-          }
-          if (data.distanceTiers && Array.isArray(data.distanceTiers)) {
-            normalized.tiers = data.distanceTiers;
+            if (typeof data.pricing.gstPercent === "number") normalized.gstPercent = data.pricing.gstPercent;
+            if (typeof data.pricing.serviceChargePercent === "number") normalized.serviceChargePercent = data.pricing.serviceChargePercent;
+            if (typeof data.pricing.boxPrice === "number") normalized.boxPrice = data.pricing.boxPrice;
+            if (Array.isArray(data.pricing.tiers)) normalized.tiers = data.pricing.tiers;
           }
         }
 
-        console.log('Normalized data:', normalized);
         reset(normalized);
       } catch (err) {
-        console.error('Error fetching pricing:', err);
-        // Fallback to defaults already set
+        console.error("Error fetching pricing:", err);
       } finally {
         if (isMounted) setIsFetching(false);
       }
@@ -149,7 +132,18 @@ export default function PricesPage() {
     }
   };
 
-  const gstMultiplier = useMemo(() => 1 + (Number(formValues.gstPercent || 0) / 100), [formValues.gstPercent]);
+  const gstMultiplier = useMemo(
+    () => 1 + (Number(formValues.gstPercent || 0) / 100),
+    [formValues.gstPercent]
+  );
+
+  const totalMultiplier = useMemo(
+    () =>
+      1 +
+      (Number(formValues.gstPercent || 0) + Number(formValues.serviceChargePercent || 0)) /
+        100,
+    [formValues.gstPercent, formValues.serviceChargePercent]
+  );
 
   return (
     <Layout>
@@ -157,11 +151,20 @@ export default function PricesPage() {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold text-gray-900">Pricing Management</h1>
-            <p className="text-gray-600">Define distance-based price tiers, per box, and GST</p>
+            <p className="text-gray-600">
+              Define distance-based price tiers, per box, GST, and Service Charge
+            </p>
           </div>
           <button
             type="button"
-            onClick={() => reset({ gstPercent: 3, boxPrice: 25, tiers: DEFAULT_TIERS })}
+            onClick={() =>
+              reset({
+                gstPercent: 3,
+                serviceChargePercent: 2,
+                boxPrice: 25,
+                tiers: DEFAULT_TIERS,
+              })
+            }
             className="px-3 py-2 text-sm font-medium rounded-md border border-gray-300 text-gray-700 bg-white hover:bg-gray-50"
           >
             Reset to defaults
@@ -170,95 +173,60 @@ export default function PricesPage() {
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
-            {/* Tiers Editor */}
+            {/* Left Side - Distance-based tiers */}
             <div className="xl:col-span-2 bg-white rounded-lg shadow-sm border border-gray-200">
               <div className="p-6 border-b border-gray-100">
                 <h3 className="text-lg font-medium text-gray-900">Distance-based Tiers</h3>
-                {/* <p className="text-sm text-gray-500">Add labels like "0-2 km" and set the price per box in ₹</p> */}
               </div>
 
               <div className="p-6 space-y-4">
-                <div className="grid grid-cols-12 text-xs font-medium text-gray-500">
-                  <div className="col-span-6">Label</div>
-                  {/* <div className="col-span-4">Price per box (₹)</div> */}
-                  {/* <div className="col-span-2 text-right">Actions</div> */}
-                </div>
-
-                <div className="space-y-3">
-                  {fields.map((field, index) => (
-                    <div key={field.id} className="grid grid-cols-12 gap-3 items-center">
-                      <div className="col-span-6">
-                        <div className="relative">
-                          <Tag className="absolute left-3 top-2.5 h-4 w-4 text-gray-400" />
-                          <input
-                            {...register(`tiers.${index}.label`)}
-                            type="text"
-                            disabled
-                            placeholder="e.g. 0-2 km"
-                            className="pl-9 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-sm text-gray-900"
-                          />
-                        </div>
-                        {errors.tiers?.[index]?.label && (
-                          <p className="mt-1 text-xs text-red-600">{errors.tiers[index].label.message}</p>
-                        )}
+                {fields.map((field, index) => (
+                  <div key={field.id} className="grid grid-cols-12 gap-3 items-center">
+                    <div className="col-span-6">
+                      <div className="relative">
+                        <Tag className="absolute left-3 top-2.5 h-4 w-4 text-gray-400" />
+                        <input
+                          {...register(`tiers.${index}.label`)}
+                          type="text"
+                          disabled
+                          placeholder="e.g. 0-2 km"
+                          className="pl-9 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none text-sm text-gray-900"
+                        />
                       </div>
-
-                      <div className="col-span-4">
-                        <div className="relative">
-                          <IndianRupee className="absolute left-3 top-2.5 h-4 w-4 text-gray-400" />
-                          <input
-                            {...register(`tiers.${index}.price`)}
-                            type="number"
-                            min="0"
-                            step="0.01"
-                            placeholder="25"
-                            className="pl-9 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-sm text-gray-900"
-                          />
-                        </div>
-                        {errors.tiers?.[index]?.price && (
-                          <p className="mt-1 text-xs text-red-600">{errors.tiers[index].price.message}</p>
-                        )}
-                      </div>
-
-                      {/* <div className="col-span-2 flex justify-end">
-                        <button
-                          type="button"
-                          onClick={() => remove(index)}
-                          className="inline-flex items-center px-2.5 py-2 border border-gray-300 rounded-md text-gray-700 bg-white hover:bg-gray-50"
-                          aria-label="Remove tier"
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </button>
-                      </div> */}
                     </div>
-                  ))}
-                </div>
 
-                <div className="pt-2">
-                  <button
-                    type="button"
-                    onClick={() => append({ label: "", price: 0 })}
-                    className="inline-flex items-center px-3 py-2 text-sm font-medium rounded-md border border-gray-300 text-gray-700 bg-white hover:bg-gray-50"
-                  >
-                    <Plus className="h-4 w-4 mr-2" /> Add tier
-                  </button>
-                </div>
-
-                {typeof errors.tiers?.message === "string" && (
-                  <p className="text-sm text-red-600">{errors.tiers.message}</p>
-                )}
+                    <div className="col-span-4">
+                      <div className="relative">
+                        <IndianRupee className="absolute left-3 top-2.5 h-4 w-4 text-gray-400" />
+                        <input
+                          {...register(`tiers.${index}.price`)}
+                          type="number"
+                          min="0"
+                          step="0.01"
+                          className="pl-9 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none text-sm text-gray-900"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                ))}
+                <button
+                  type="button"
+                  onClick={() => append({ label: "", price: 0 })}
+                  className="inline-flex items-center px-3 py-2 text-sm font-medium rounded-md border border-gray-300 text-gray-700 bg-white hover:bg-gray-50 mt-3"
+                >
+                  <Plus className="h-4 w-4 mr-2" /> Add Tier
+                </button>
               </div>
             </div>
 
-            {/* GST and One Box */}
+            {/* Right Side - GST, Service Charge, One Box */}
             <div className="space-y-6">
+              {/* GST */}
               <div className="bg-white rounded-lg shadow-sm border border-gray-200">
                 <div className="p-6 border-b border-gray-100">
-                  <h3 className="text-lg font-medium text-gray-900">GST</h3>
-                  <p className="text-sm text-gray-500">Set GST as a percentage</p>
+                  <h3 className="text-lg font-medium text-gray-900">GST (%)</h3>
                 </div>
                 <div className="p-6">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">GST (%)</label>
                   <div className="relative">
                     <Percent className="absolute left-3 top-2.5 h-4 w-4 text-gray-400" />
                     <input
@@ -267,8 +235,7 @@ export default function PricesPage() {
                       min="0"
                       max="100"
                       step="0.01"
-                      placeholder="3"
-                      className="pl-9 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-sm text-gray-900"
+                      className="pl-9 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm text-sm text-gray-900"
                     />
                   </div>
                   {errors.gstPercent && (
@@ -277,13 +244,37 @@ export default function PricesPage() {
                 </div>
               </div>
 
+              {/* ✅ Service Charge */}
               <div className="bg-white rounded-lg shadow-sm border border-gray-200">
                 <div className="p-6 border-b border-gray-100">
-                  <h3 className="text-lg font-medium text-gray-900">Price for one box</h3>
-                  <p className="text-sm text-gray-500">Set the default price per box</p>
+                  <h3 className="text-lg font-medium text-gray-900">Service Charge (%)</h3>
+                </div>
+                <div className="p-6">
+                  <div className="relative">
+                    <Percent className="absolute left-3 top-2.5 h-4 w-4 text-gray-400" />
+                    <input
+                      {...register("serviceChargePercent")}
+                      type="number"
+                      min="0"
+                      max="100"
+                      step="0.01"
+                      className="pl-9 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm text-sm text-gray-900"
+                    />
+                  </div>
+                  {errors.serviceChargePercent && (
+                    <p className="mt-1 text-sm text-red-600">
+                      {errors.serviceChargePercent.message}
+                    </p>
+                  )}
+                </div>
+              </div>
+
+              {/* Box Price */}
+              <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+                <div className="p-6 border-b border-gray-100">
+                  <h3 className="text-lg font-medium text-gray-900">Price for One Box</h3>
                 </div>
                 <div className="p-6 space-y-2">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">One box (₹)</label>
                   <div className="relative">
                     <IndianRupee className="absolute left-3 top-2.5 h-4 w-4 text-gray-400" />
                     <input
@@ -291,53 +282,29 @@ export default function PricesPage() {
                       type="number"
                       min="0"
                       step="0.01"
-                      placeholder="25"
-                      className="pl-9 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-sm text-gray-900"
+                      className="pl-9 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm text-sm text-gray-900"
                     />
                   </div>
                   {errors.boxPrice && (
                     <p className="mt-1 text-sm text-red-600">{errors.boxPrice.message}</p>
                   )}
                   <div className="mt-3 flex items-center justify-between text-sm">
-                    <span className="text-gray-500">With GST:</span>
-                    <span className="font-semibold text-gray-900">₹{(Number(formValues.boxPrice || 0) * gstMultiplier).toFixed(2)}</span>
+                    <span className="text-gray-500">With GST + Service Charge:</span>
+                    <span className="font-semibold text-gray-900">
+                      ₹{(Number(formValues.boxPrice || 0) * totalMultiplier).toFixed(2)}
+                    </span>
                   </div>
-                </div>
-              </div>
-
-              <div className="bg-white rounded-lg shadow-sm border border-gray-200">
-                <div className="p-6 border-b border-gray-100">
-                  <h3 className="text-lg font-medium text-gray-900">Preview</h3>
-                  <p className="text-sm text-gray-500">Prices per box with GST applied</p>
-                </div>
-                <div className="p-4 sm:p-6 divide-y divide-gray-100">
-                  {formValues?.tiers?.length ? (
-                    formValues.tiers.map((t, i) => {
-                      const base = Number(t.price || 0);
-                      const withGst = base * gstMultiplier;
-                      return (
-                        <div key={`${t.label}-${i}`} className="flex items-center justify-between py-3">
-                          <div className="text-sm text-gray-700">{t.label || "Untitled"}</div>
-                          <div className="flex items-baseline gap-3">
-                            <div className="text-sm text-gray-500 line-through">₹{base.toFixed(2)}</div>
-                            <div className="text-base font-semibold text-gray-900">₹{withGst.toFixed(2)}</div>
-                          </div>
-                        </div>
-                      );
-                    })
-                  ) : (
-                    <div className="text-sm text-gray-500">No tiers configured</div>
-                  )}
                 </div>
               </div>
             </div>
           </div>
 
+          {/* Save Button */}
           <div className="flex justify-end">
             <button
               type="submit"
               disabled={isSubmitting || isFetching}
-              className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700"
             >
               {isSubmitting ? (
                 <>
@@ -346,8 +313,7 @@ export default function PricesPage() {
                 </>
               ) : (
                 <>
-                  <Save className="mr-2 h-4 w-4" />
-                  Save Pricing
+                  <Save className="mr-2 h-4 w-4" /> Save Pricing
                 </>
               )}
             </button>
