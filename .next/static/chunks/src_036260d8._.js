@@ -424,7 +424,7 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$axios$2f$lib
 ;
 // Create axios instance
 const api = __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$axios$2f$lib$2f$axios$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"].create({
-    baseURL: 'https://middaybox-backend.onrender.com/api',
+    baseURL: 'https://api.middaybox.com/api',
     headers: {
         'Content-Type': 'application/json'
     }

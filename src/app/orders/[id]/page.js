@@ -55,7 +55,7 @@ export default function OrderDetails() {
       setError(null);
 
       const token = localStorage.getItem('adminToken');
-      const response = await axios.get(`https://middaybox-backend.onrender.com/api/admin/orders/${params.id}`, {
+      const response = await axios.get(`https://api.middaybox.com/api/admin/orders/${params.id}`, {
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -130,7 +130,7 @@ export default function OrderDetails() {
   // const fetchDeliveryBoys = async () => {
   //   try {
   //     const token = localStorage.getItem('adminToken');
-  //     const response = await axios.get(`https://middaybox-backend.onrender.com/api/admin/users?userType=deliveryboy&page=1&limit=50`, {
+  //     const response = await axios.get(`https://api.middaybox.com/api/admin/users?userType=deliveryboy&page=1&limit=50`, {
   //       headers: {
   //         Authorization: `Bearer ${token}`
   //       }
@@ -171,7 +171,7 @@ export default function OrderDetails() {
       setAssigning(true);
       const token = localStorage.getItem('adminToken');
       
-      await axios.post(`https://middaybox-backend.onrender.com/api/admin/orders/${params.id}/assign-delivery-boy`, {
+      await axios.post(`https://api.middaybox.com/api/admin/orders/${params.id}/assign-delivery-boy`, {
         deliveryBoyId: selectedDeliveryBoy
       }, {
         headers: {

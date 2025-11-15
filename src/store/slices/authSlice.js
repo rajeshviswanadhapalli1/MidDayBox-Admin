@@ -14,7 +14,7 @@ export const loginUser = createAsyncThunk(
   'auth/loginUser',
   async (credentials, { rejectWithValue }) => {
     try {
-      const response = await axios.post('https://middaybox-backend.onrender.com/api/admin/login', credentials);
+      const response = await axios.post('https://api.middaybox.com/api/admin/login', credentials);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || 'Login failed');
@@ -27,7 +27,7 @@ export const logoutUser = createAsyncThunk(
   'auth/logoutUser',
   async (_, { rejectWithValue }) => {
     try {
-      await axios.post('https://middaybox-backend.onrender.com/api/admin/logout');
+      await axios.post('https://api.middaybox.com/api/admin/logout');
       return null;
     } catch (error) {
       return rejectWithValue('Logout failed');
@@ -40,7 +40,7 @@ export const getUserProfile = createAsyncThunk(
   'auth/getUserProfile',
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get('https://middaybox-backend.onrender.com/api/admin/profile');
+      const response = await axios.get('https://api.middaybox.com/api/admin/profile');
       return response.data;
     } catch (error) {
       return rejectWithValue('Failed to get user profile');

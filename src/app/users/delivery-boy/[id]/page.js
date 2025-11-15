@@ -115,7 +115,7 @@ export default function DeliveryBoyDetails() {
       setApproving(true);
       const token = localStorage.getItem('adminToken');
       
-      await axios.patch(`https://middaybox-backend.onrender.com/api/admin/delivery-boys/${params.id}/status`, {
+      await axios.patch(`https://api.middaybox.com/api/admin/delivery-boys/${params.id}/status`, {
         status: 'approved'
       }, {
         headers: {
@@ -144,7 +144,7 @@ export default function DeliveryBoyDetails() {
       setApproving(true);
       const token = localStorage.getItem('adminToken');
       
-      await axios.patch(`https://middaybox-backend.onrender.com/api/admin/delivery-boys/${params.id}/status`, {
+      await axios.patch(`https://api.middaybox.com/api/admin/delivery-boys/${params.id}/status`, {
         status: 'rejected'
       }, {
         headers: {

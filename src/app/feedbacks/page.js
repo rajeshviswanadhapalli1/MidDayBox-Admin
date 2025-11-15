@@ -17,7 +17,7 @@ const AdminFeedbackTable = () => {
     
       try {
         const token = localStorage.getItem('adminToken');
-        const res = await axios.get("https://middaybox-backend.onrender.com/api/feedback//getAllFeedback", {
+        const res = await axios.get("https://api.middaybox.com/api/feedback//getAllFeedback", {
         headers: {
           Authorization: `Bearer ${token}`
         }

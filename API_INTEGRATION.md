@@ -44,7 +44,7 @@ src/
 The API base URL is configured in `src/utils/axios.js`:
 ```javascript
 const api = axios.create({
-  baseURL: 'https://middaybox-backend.onrender.com/api',
+  baseURL: 'https://api.middaybox.com/api',
   headers: {
     'Content-Type': 'application/json',
   },
@@ -222,7 +222,7 @@ const handleLogin = (credentials) => {
 ### Environment Variables
 Create `.env.local` file:
 ```env
-NEXT_PUBLIC_API_URL=https://middaybox-backend.onrender.com/api
+NEXT_PUBLIC_API_URL=https://api.middaybox.com/api
 NEXT_PUBLIC_ENVIRONMENT=development
 ```
 
@@ -230,7 +230,7 @@ NEXT_PUBLIC_ENVIRONMENT=development
 Update `src/utils/axios.js`:
 ```javascript
 const api = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL || 'https://middaybox-backend.onrender.com/api',
+  baseURL: process.env.NEXT_PUBLIC_API_URL || 'https://api.middaybox.com/api',
   // ... other config
 });
 ```
@@ -257,7 +257,7 @@ const api = axios.create({
 ### API Testing
 ```bash
 # Test login endpoint
-curl -X POST https://middaybox-backend.onrender.com/api/admin/login \
+curl -X POST https://api.middaybox.com/api/admin/login \
   -H "Content-Type: application/json" \
   -d '{"email":"admin@lunchapp.com","password":"admin123"}'
 ```

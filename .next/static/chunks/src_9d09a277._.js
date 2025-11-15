@@ -599,7 +599,7 @@ function OrderDetails() {
             setLoading(true);
             setError(null);
             const token = localStorage.getItem('adminToken');
-            const response = await __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$axios$2f$lib$2f$axios$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"].get("https://middaybox-backend.onrender.com/api/admin/orders/".concat(params.id), {
+            const response = await __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$axios$2f$lib$2f$axios$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"].get("https://api.middaybox.com/api/admin/orders/".concat(params.id), {
                 headers: {
                     Authorization: "Bearer ".concat(token)
                 }
@@ -671,7 +671,7 @@ function OrderDetails() {
     // const fetchDeliveryBoys = async () => {
     //   try {
     //     const token = localStorage.getItem('adminToken');
-    //     const response = await axios.get(`https://middaybox-backend.onrender.com/api/admin/users?userType=deliveryboy&page=1&limit=50`, {
+    //     const response = await axios.get(`https://api.middaybox.com/api/admin/users?userType=deliveryboy&page=1&limit=50`, {
     //       headers: {
     //         Authorization: `Bearer ${token}`
     //       }
@@ -708,7 +708,7 @@ function OrderDetails() {
         try {
             setAssigning(true);
             const token = localStorage.getItem('adminToken');
-            await __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$axios$2f$lib$2f$axios$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"].post("https://middaybox-backend.onrender.com/api/admin/orders/".concat(params.id, "/assign-delivery-boy"), {
+            await __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$axios$2f$lib$2f$axios$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"].post("https://api.middaybox.com/api/admin/orders/".concat(params.id, "/assign-delivery-boy"), {
                 deliveryBoyId: selectedDeliveryBoy
             }, {
                 headers: {

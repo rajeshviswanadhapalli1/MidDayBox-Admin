@@ -83,7 +83,7 @@ export default function OrdersPage() {
         params.endDate = endDate;
       }
 
-      const response = await axios.get(`https://middaybox-backend.onrender.com/api/admin/orders`, {
+      const response = await axios.get(`https://api.middaybox.com/api/admin/orders`, {
         headers: {
           Authorization: `Bearer ${token}`
         },

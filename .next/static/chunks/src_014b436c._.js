@@ -600,7 +600,7 @@ function UsersPage() {
             dispatch((0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$store$2f$slices$2f$apiSlice$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["clearUsersError"])());
             const token = localStorage.getItem('adminToken');
             const userType = activeTab === "delivery-boys" ? "deliveryboy" : "parent";
-            const response = await __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$axios$2f$lib$2f$axios$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"].get("https://middaybox-backend.onrender.com/api/admin/users", {
+            const response = await __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$axios$2f$lib$2f$axios$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"].get("https://api.middaybox.com/api/admin/users", {
                 headers: {
                     Authorization: "Bearer ".concat(token)
                 },

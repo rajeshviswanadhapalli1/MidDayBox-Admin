@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // Create axios instance
 const api = axios.create({
-  baseURL: 'https://middaybox-backend.onrender.com/api',
+  baseURL: 'https://api.middaybox.com/api',
   headers: {
     'Content-Type': 'application/json',
   },

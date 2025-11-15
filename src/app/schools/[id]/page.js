@@ -33,7 +33,7 @@ export default function SchoolDetailsPage() {
      
         try {
           const token = localStorage.getItem('adminToken');
-          const res = await axios.get(`https://middaybox-backend.onrender.com/api/admin/school-registrations/${params.id}`,{ headers: { Authorization: `Bearer ${token}` }});
+          const res = await axios.get(`https://api.middaybox.com/api/admin/school-registrations/${params.id}`,{ headers: { Authorization: `Bearer ${token}` }});
           setSchool(res.data?.registration || res.data);
         } catch (e) {
           console.error('Failed to fetch school by id', e);
@@ -51,7 +51,7 @@ export default function SchoolDetailsPage() {
     try {
       setProcessing(true);
       const token = localStorage.getItem('adminToken');
-      await axios.patch(`https://middaybox-backend.onrender.com/api/admin/school-registrations/${params.id}/status`, { status }, {
+      await axios.patch(`https://api.middaybox.com/api/admin/school-registrations/${params.id}/status`, { status }, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setSchool(prev => ({ ...prev, status }));

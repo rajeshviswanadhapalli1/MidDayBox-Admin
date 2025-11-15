@@ -31,7 +31,7 @@ export default function SchoolsPage() {
       setLoading(true);
       setError(null);
       const token = localStorage.getItem('adminToken');
-      const response = await axios.get('https://middaybox-backend.onrender.com/api/admin/school-registrations', {
+      const response = await axios.get('https://api.middaybox.com/api/admin/school-registrations', {
         headers: { Authorization: `Bearer ${token}` },
         params: { search: search || undefined }
       });

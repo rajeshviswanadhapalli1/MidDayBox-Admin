@@ -38,7 +38,7 @@ export default function UsersPage() {
       const token = localStorage.getItem('adminToken');
       const userType = activeTab === "delivery-boys" ? "deliveryboy" : "parent";
       
-      const response = await axios.get(`https://middaybox-backend.onrender.com/api/admin/users`, {
+      const response = await axios.get(`https://api.middaybox.com/api/admin/users`, {
         headers: {
           Authorization: `Bearer ${token}`
         },

@@ -22,7 +22,7 @@ export default function Dashboard() {
         setError(null);
         
         const token = localStorage.getItem('adminToken');
-        const response = await axios.get('https://middaybox-backend.onrender.com/api/admin/dashboard', {
+        const response = await axios.get('https://api.middaybox.com/api/admin/dashboard', {
           headers: {
             Authorization: `Bearer ${token}`
           }
