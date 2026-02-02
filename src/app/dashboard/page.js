@@ -187,7 +187,7 @@ export default function Dashboard() {
                         {order.orderNumber}
                       </p>
                       <p className="text-sm text-gray-500">
-                        {order.parentId.name} • {order.schoolId?.schoolName}
+                        {order?.parentId?.name} • {order?.schoolId?.schoolName}
                       </p>
                     </div>
                     <div className="flex items-center space-x-2">

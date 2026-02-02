@@ -2,11 +2,11 @@
   "/dashboard/page": "app/dashboard/page.js",
   "/favicon.ico/route": "app/favicon.ico/route.js",
   "/login/page": "app/login/page.js",
-  "/orders/[id]/page": "app/orders/[id]/page.js",
   "/orders/page": "app/orders/page.js",
   "/page": "app/page.js",
   "/prices/page": "app/prices/page.js",
   "/schools/[id]/page": "app/schools/[id]/page.js",
   "/schools/page": "app/schools/page.js",
+  "/transactions/page": "app/transactions/page.js",
   "/users/page": "app/users/page.js"
 }

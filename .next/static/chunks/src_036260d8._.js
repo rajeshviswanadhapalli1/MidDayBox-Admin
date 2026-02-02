@@ -22,6 +22,7 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$re
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$log$2d$out$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__LogOut$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/log-out.js [app-client] (ecmascript) <export default as LogOut>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$trending$2d$up$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__TrendingUp$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/trending-up.js [app-client] (ecmascript) <export default as TrendingUp>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$school$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__School$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/school.js [app-client] (ecmascript) <export default as School>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$receipt$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Receipt$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/receipt.js [app-client] (ecmascript) <export default as Receipt>");
 ;
 var _s = __turbopack_context__.k.signature();
 "use client";
@@ -46,6 +47,7 @@ const navigation = [
         href: "/orders",
         icon: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$package$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Package$3e$__["Package"]
     },
+    // { name: "Completed Orders", href: "/completedOrders", icon: Package },
     {
         name: "Prices",
         href: "/prices",
@@ -55,6 +57,11 @@ const navigation = [
         name: "Schools",
         href: "/schools",
         icon: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$school$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__School$3e$__["School"]
+    },
+    {
+        name: "Transactions",
+        href: "/transactions",
+        icon: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$receipt$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Receipt$3e$__["Receipt"]
     },
     {
         name: "Feedbacks",
@@ -105,17 +112,17 @@ function Layout(param) {
                     className: "animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"
                 }, void 0, false, {
                     fileName: "[project]/src/components/Layout.js",
-                    lineNumber: 57,
+                    lineNumber: 60,
                     columnNumber: 11
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/components/Layout.js",
-                lineNumber: 56,
+                lineNumber: 59,
                 columnNumber: 9
             }, this)
         }, void 0, false, {
             fileName: "[project]/src/components/Layout.js",
-            lineNumber: 55,
+            lineNumber: 58,
             columnNumber: 7
         }, this);
     }
@@ -131,17 +138,17 @@ function Layout(param) {
                     className: "animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"
                 }, void 0, false, {
                     fileName: "[project]/src/components/Layout.js",
-                    lineNumber: 71,
+                    lineNumber: 74,
                     columnNumber: 11
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/components/Layout.js",
-                lineNumber: 70,
+                lineNumber: 73,
                 columnNumber: 9
             }, this)
         }, void 0, false, {
             fileName: "[project]/src/components/Layout.js",
-            lineNumber: 69,
+            lineNumber: 72,
             columnNumber: 7
         }, this);
     }
@@ -156,7 +163,7 @@ function Layout(param) {
                         onClick: ()=>setSidebarOpen(false)
                     }, void 0, false, {
                         fileName: "[project]/src/components/Layout.js",
-                        lineNumber: 81,
+                        lineNumber: 84,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -170,7 +177,7 @@ function Layout(param) {
                                         children: "Admin Dashboard"
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/Layout.js",
-                                        lineNumber: 84,
+                                        lineNumber: 87,
                                         columnNumber: 13
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -180,18 +187,18 @@ function Layout(param) {
                                             className: "h-6 w-6"
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/Layout.js",
-                                            lineNumber: 89,
+                                            lineNumber: 92,
                                             columnNumber: 15
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/Layout.js",
-                                        lineNumber: 85,
+                                        lineNumber: 88,
                                         columnNumber: 13
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/components/Layout.js",
-                                lineNumber: 83,
+                                lineNumber: 86,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("nav", {
@@ -206,20 +213,20 @@ function Layout(param) {
                                                 className: "mr-3 h-5 w-5"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/Layout.js",
-                                                lineNumber: 105,
+                                                lineNumber: 108,
                                                 columnNumber: 19
                                             }, this),
                                             item.name
                                         ]
                                     }, item.name, true, {
                                         fileName: "[project]/src/components/Layout.js",
-                                        lineNumber: 96,
+                                        lineNumber: 99,
                                         columnNumber: 17
                                     }, this);
                                 })
                             }, void 0, false, {
                                 fileName: "[project]/src/components/Layout.js",
-                                lineNumber: 92,
+                                lineNumber: 95,
                                 columnNumber: 11
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -232,31 +239,31 @@ function Layout(param) {
                                             className: "mr-3 h-5 w-5"
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/Layout.js",
-                                            lineNumber: 116,
+                                            lineNumber: 119,
                                             columnNumber: 15
                                         }, this),
                                         "Logout"
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/Layout.js",
-                                    lineNumber: 112,
+                                    lineNumber: 115,
                                     columnNumber: 13
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/src/components/Layout.js",
-                                lineNumber: 111,
+                                lineNumber: 114,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/components/Layout.js",
-                        lineNumber: 82,
+                        lineNumber: 85,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/components/Layout.js",
-                lineNumber: 80,
+                lineNumber: 83,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -271,12 +278,12 @@ function Layout(param) {
                                 children: "Admin Dashboard"
                             }, void 0, false, {
                                 fileName: "[project]/src/components/Layout.js",
-                                lineNumber: 127,
+                                lineNumber: 130,
                                 columnNumber: 13
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/src/components/Layout.js",
-                            lineNumber: 126,
+                            lineNumber: 129,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("nav", {
@@ -291,20 +298,20 @@ function Layout(param) {
                                             className: "mr-3 h-5 w-5"
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/Layout.js",
-                                            lineNumber: 142,
+                                            lineNumber: 145,
                                             columnNumber: 19
                                         }, this),
                                         item.name
                                     ]
                                 }, item.name, true, {
                                     fileName: "[project]/src/components/Layout.js",
-                                    lineNumber: 133,
+                                    lineNumber: 136,
                                     columnNumber: 17
                                 }, this);
                             })
                         }, void 0, false, {
                             fileName: "[project]/src/components/Layout.js",
-                            lineNumber: 129,
+                            lineNumber: 132,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -317,30 +324,30 @@ function Layout(param) {
                                         className: "mr-3 h-5 w-5"
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/Layout.js",
-                                        lineNumber: 153,
+                                        lineNumber: 156,
                                         columnNumber: 15
                                     }, this),
                                     "Logout"
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/components/Layout.js",
-                                lineNumber: 149,
+                                lineNumber: 152,
                                 columnNumber: 13
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/src/components/Layout.js",
-                            lineNumber: 148,
+                            lineNumber: 151,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/components/Layout.js",
-                    lineNumber: 125,
+                    lineNumber: 128,
                     columnNumber: 9
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/components/Layout.js",
-                lineNumber: 124,
+                lineNumber: 127,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -356,17 +363,17 @@ function Layout(param) {
                                 className: "h-6 w-6"
                             }, void 0, false, {
                                 fileName: "[project]/src/components/Layout.js",
-                                lineNumber: 168,
+                                lineNumber: 171,
                                 columnNumber: 13
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/src/components/Layout.js",
-                            lineNumber: 163,
+                            lineNumber: 166,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/src/components/Layout.js",
-                        lineNumber: 162,
+                        lineNumber: 165,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("main", {
@@ -376,24 +383,24 @@ function Layout(param) {
                             children: children
                         }, void 0, false, {
                             fileName: "[project]/src/components/Layout.js",
-                            lineNumber: 173,
+                            lineNumber: 176,
                             columnNumber: 11
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/src/components/Layout.js",
-                        lineNumber: 172,
+                        lineNumber: 175,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/components/Layout.js",
-                lineNumber: 161,
+                lineNumber: 164,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/components/Layout.js",
-        lineNumber: 78,
+        lineNumber: 81,
         columnNumber: 5
     }, this);
 }
@@ -468,8 +475,10 @@ __turbopack_context__.s({
     "authAPI": ()=>authAPI,
     "ordersAPI": ()=>ordersAPI,
     "pricingAPI": ()=>pricingAPI,
+    "schoolPaymentAPI": ()=>schoolPaymentAPI,
     "schoolsAPI": ()=>schoolsAPI,
     "statsAPI": ()=>statsAPI,
+    "transactionsAPI": ()=>transactionsAPI,
     "usersAPI": ()=>usersAPI
 });
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$utils$2f$axios$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/utils/axios.js [app-client] (ecmascript)");
@@ -522,6 +531,17 @@ const schoolsAPI = {
     createSchool: (data)=>__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$utils$2f$axios$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"].post('/admin/schools', data),
     updateSchool: (id, data)=>__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$utils$2f$axios$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"].put("/admin/schools/".concat(id), data),
     deleteSchool: (id)=>__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$utils$2f$axios$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"].delete("/admin/schools/".concat(id))
+};
+const schoolPaymentAPI = {
+    getPendingSchoolPayments: (params)=>__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$utils$2f$axios$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"].get('/admin/pending-school-payments', {
+            params
+        }),
+    recordSchoolPayment: (payload)=>__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$utils$2f$axios$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"].post('/admin/record-school-payment', payload)
+};
+const transactionsAPI = {
+    getTransactions: (params)=>__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$utils$2f$axios$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"].get('/admin/transactions', {
+            params
+        })
 };
 const apiHelper = {
     handleResponse: (response)=>response.data,
@@ -593,6 +613,7 @@ const DEFAULT_TIERS = [
 const schema = __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$yup$2f$index$2e$esm$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["object"]({
     gstPercent: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$yup$2f$index$2e$esm$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["number"]().typeError("GST must be a number").min(0, "GST cannot be negative").max(100, "GST cannot exceed 100%").required("GST is required"),
     serviceChargePercent: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$yup$2f$index$2e$esm$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["number"]().typeError("Service charge must be a number").min(0, "Service charge cannot be negative").max(100, "Service charge cannot exceed 100%").required("Service charge is required"),
+    schoolPaymentPercent: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$yup$2f$index$2e$esm$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["number"]().typeError("School payment must be a number").min(0, "School payment cannot be negative").max(100, "School payment cannot exceed 100%").required("School payment percent is required"),
     boxPrice: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$yup$2f$index$2e$esm$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["number"]().typeError("Price for one box must be a number").min(0, "Price for one box cannot be negative").required("Price for one box is required"),
     tiers: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$yup$2f$index$2e$esm$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["array"]().of(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$yup$2f$index$2e$esm$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["object"]({
         label: __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$yup$2f$index$2e$esm$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["string"]().trim().required("Label is required"),
@@ -608,6 +629,7 @@ function PricesPage() {
         defaultValues: {
             gstPercent: 3,
             serviceChargePercent: 2,
+            schoolPaymentPercent: 2,
             boxPrice: 25,
             tiers: DEFAULT_TIERS
         }
@@ -630,17 +652,20 @@ function PricesPage() {
                         let normalized = {
                             gstPercent: 3,
                             serviceChargePercent: 2,
+                            schoolPaymentPercent: 2,
                             boxPrice: 25,
                             tiers: DEFAULT_TIERS
                         };
                         if (data) {
                             if (typeof data.gstPercent === "number") normalized.gstPercent = data.gstPercent;
                             if (typeof data.serviceChargePercent === "number") normalized.serviceChargePercent = data.serviceChargePercent;
+                            if (typeof data.schoolPaymentPercent === "number") normalized.schoolPaymentPercent = data.schoolPaymentPercent;
                             if (typeof data.boxPrice === "number") normalized.boxPrice = data.boxPrice;
                             if (Array.isArray(data.tiers) && data.tiers.length > 0) normalized.tiers = data.tiers;
                             if (data.pricing) {
                                 if (typeof data.pricing.gstPercent === "number") normalized.gstPercent = data.pricing.gstPercent;
                                 if (typeof data.pricing.serviceChargePercent === "number") normalized.serviceChargePercent = data.pricing.serviceChargePercent;
+                                if (typeof data.pricing.schoolPaymentPercent === "number") normalized.schoolPaymentPercent = data.pricing.schoolPaymentPercent;
                                 if (typeof data.pricing.boxPrice === "number") normalized.boxPrice = data.pricing.boxPrice;
                                 if (Array.isArray(data.pricing.tiers)) normalized.tiers = data.pricing.tiers;
                             }
@@ -686,6 +711,7 @@ function PricesPage() {
         formValues.gstPercent,
         formValues.serviceChargePercent
     ]);
+    var _formValues_schoolPaymentPercent;
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$src$2f$components$2f$Layout$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
             className: "space-y-6",
@@ -700,7 +726,7 @@ function PricesPage() {
                                     children: "Pricing Management"
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/prices/page.js",
-                                    lineNumber: 153,
+                                    lineNumber: 163,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -708,13 +734,13 @@ function PricesPage() {
                                     children: "Define distance-based price tiers, per box, GST, and Service Charge"
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/prices/page.js",
-                                    lineNumber: 154,
+                                    lineNumber: 164,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/app/prices/page.js",
-                            lineNumber: 152,
+                            lineNumber: 162,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -722,6 +748,7 @@ function PricesPage() {
                             onClick: ()=>reset({
                                     gstPercent: 3,
                                     serviceChargePercent: 2,
+                                    schoolPaymentPercent: 2,
                                     boxPrice: 25,
                                     tiers: DEFAULT_TIERS
                                 }),
@@ -729,13 +756,13 @@ function PricesPage() {
                             children: "Reset to defaults"
                         }, void 0, false, {
                             fileName: "[project]/src/app/prices/page.js",
-                            lineNumber: 158,
+                            lineNumber: 168,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/app/prices/page.js",
-                    lineNumber: 151,
+                    lineNumber: 161,
                     columnNumber: 9
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("form", {
@@ -755,12 +782,12 @@ function PricesPage() {
                                                 children: "Distance-based Tiers"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/prices/page.js",
-                                                lineNumber: 179,
+                                                lineNumber: 190,
                                                 columnNumber: 17
                                             }, this)
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/prices/page.js",
-                                            lineNumber: 178,
+                                            lineNumber: 189,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -778,7 +805,7 @@ function PricesPage() {
                                                                             className: "absolute left-3 top-2.5 h-4 w-4 text-gray-400"
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/src/app/prices/page.js",
-                                                                            lineNumber: 187,
+                                                                            lineNumber: 198,
                                                                             columnNumber: 25
                                                                         }, this),
                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -789,18 +816,18 @@ function PricesPage() {
                                                                             className: "pl-9 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none text-sm text-gray-900"
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/src/app/prices/page.js",
-                                                                            lineNumber: 188,
+                                                                            lineNumber: 199,
                                                                             columnNumber: 25
                                                                         }, this)
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/src/app/prices/page.js",
-                                                                    lineNumber: 186,
+                                                                    lineNumber: 197,
                                                                     columnNumber: 23
                                                                 }, this)
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/app/prices/page.js",
-                                                                lineNumber: 185,
+                                                                lineNumber: 196,
                                                                 columnNumber: 21
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -812,7 +839,7 @@ function PricesPage() {
                                                                             className: "absolute left-3 top-2.5 h-4 w-4 text-gray-400"
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/src/app/prices/page.js",
-                                                                            lineNumber: 200,
+                                                                            lineNumber: 211,
                                                                             columnNumber: 25
                                                                         }, this),
                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -823,24 +850,24 @@ function PricesPage() {
                                                                             className: "pl-9 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none text-sm text-gray-900"
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/src/app/prices/page.js",
-                                                                            lineNumber: 201,
+                                                                            lineNumber: 212,
                                                                             columnNumber: 25
                                                                         }, this)
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/src/app/prices/page.js",
-                                                                    lineNumber: 199,
+                                                                    lineNumber: 210,
                                                                     columnNumber: 23
                                                                 }, this)
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/app/prices/page.js",
-                                                                lineNumber: 198,
+                                                                lineNumber: 209,
                                                                 columnNumber: 21
                                                             }, this)
                                                         ]
                                                     }, field.id, true, {
                                                         fileName: "[project]/src/app/prices/page.js",
-                                                        lineNumber: 184,
+                                                        lineNumber: 195,
                                                         columnNumber: 19
                                                     }, this)),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -855,26 +882,26 @@ function PricesPage() {
                                                             className: "h-4 w-4 mr-2"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/app/prices/page.js",
-                                                            lineNumber: 217,
+                                                            lineNumber: 228,
                                                             columnNumber: 19
                                                         }, this),
                                                         " Add Tier"
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/app/prices/page.js",
-                                                    lineNumber: 212,
+                                                    lineNumber: 223,
                                                     columnNumber: 17
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/app/prices/page.js",
-                                            lineNumber: 182,
+                                            lineNumber: 193,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/app/prices/page.js",
-                                    lineNumber: 177,
+                                    lineNumber: 188,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -890,12 +917,12 @@ function PricesPage() {
                                                         children: "GST (%)"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/prices/page.js",
-                                                        lineNumber: 227,
+                                                        lineNumber: 238,
                                                         columnNumber: 19
                                                     }, this)
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/prices/page.js",
-                                                    lineNumber: 226,
+                                                    lineNumber: 237,
                                                     columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -908,7 +935,7 @@ function PricesPage() {
                                                                     className: "absolute left-3 top-2.5 h-4 w-4 text-gray-400"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/app/prices/page.js",
-                                                                    lineNumber: 231,
+                                                                    lineNumber: 242,
                                                                     columnNumber: 21
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -920,13 +947,13 @@ function PricesPage() {
                                                                     className: "pl-9 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm text-sm text-gray-900"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/app/prices/page.js",
-                                                                    lineNumber: 232,
+                                                                    lineNumber: 243,
                                                                     columnNumber: 21
                                                                 }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/app/prices/page.js",
-                                                            lineNumber: 230,
+                                                            lineNumber: 241,
                                                             columnNumber: 19
                                                         }, this),
                                                         errors.gstPercent && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -934,19 +961,19 @@ function PricesPage() {
                                                             children: errors.gstPercent.message
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/app/prices/page.js",
-                                                            lineNumber: 242,
+                                                            lineNumber: 253,
                                                             columnNumber: 21
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/app/prices/page.js",
-                                                    lineNumber: 229,
+                                                    lineNumber: 240,
                                                     columnNumber: 17
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/app/prices/page.js",
-                                            lineNumber: 225,
+                                            lineNumber: 236,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -959,12 +986,12 @@ function PricesPage() {
                                                         children: "Service Charge (%)"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/prices/page.js",
-                                                        lineNumber: 250,
+                                                        lineNumber: 261,
                                                         columnNumber: 19
                                                     }, this)
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/prices/page.js",
-                                                    lineNumber: 249,
+                                                    lineNumber: 260,
                                                     columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -977,7 +1004,7 @@ function PricesPage() {
                                                                     className: "absolute left-3 top-2.5 h-4 w-4 text-gray-400"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/app/prices/page.js",
-                                                                    lineNumber: 254,
+                                                                    lineNumber: 265,
                                                                     columnNumber: 21
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -989,13 +1016,13 @@ function PricesPage() {
                                                                     className: "pl-9 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm text-sm text-gray-900"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/app/prices/page.js",
-                                                                    lineNumber: 255,
+                                                                    lineNumber: 266,
                                                                     columnNumber: 21
                                                                 }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/app/prices/page.js",
-                                                            lineNumber: 253,
+                                                            lineNumber: 264,
                                                             columnNumber: 19
                                                         }, this),
                                                         errors.serviceChargePercent && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1003,19 +1030,96 @@ function PricesPage() {
                                                             children: errors.serviceChargePercent.message
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/app/prices/page.js",
-                                                            lineNumber: 265,
+                                                            lineNumber: 276,
                                                             columnNumber: 21
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/app/prices/page.js",
-                                                    lineNumber: 252,
+                                                    lineNumber: 263,
                                                     columnNumber: 17
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/app/prices/page.js",
-                                            lineNumber: 248,
+                                            lineNumber: 259,
+                                            columnNumber: 15
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                            className: "bg-white rounded-lg shadow-sm border border-gray-200",
+                                            children: [
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                    className: "p-6 border-b border-gray-100",
+                                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
+                                                        className: "text-lg font-medium text-gray-900",
+                                                        children: "School Payment (%)"
+                                                    }, void 0, false, {
+                                                        fileName: "[project]/src/app/prices/page.js",
+                                                        lineNumber: 286,
+                                                        columnNumber: 19
+                                                    }, this)
+                                                }, void 0, false, {
+                                                    fileName: "[project]/src/app/prices/page.js",
+                                                    lineNumber: 285,
+                                                    columnNumber: 17
+                                                }, this),
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                    className: "p-6",
+                                                    children: [
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                            className: "relative",
+                                                            children: [
+                                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$percent$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Percent$3e$__["Percent"], {
+                                                                    className: "absolute left-3 top-2.5 h-4 w-4 text-gray-400"
+                                                                }, void 0, false, {
+                                                                    fileName: "[project]/src/app/prices/page.js",
+                                                                    lineNumber: 290,
+                                                                    columnNumber: 21
+                                                                }, this),
+                                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
+                                                                    ...register("schoolPaymentPercent"),
+                                                                    type: "number",
+                                                                    min: "0",
+                                                                    max: "100",
+                                                                    step: "0.01",
+                                                                    className: "pl-9 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm text-sm text-gray-900"
+                                                                }, void 0, false, {
+                                                                    fileName: "[project]/src/app/prices/page.js",
+                                                                    lineNumber: 291,
+                                                                    columnNumber: 21
+                                                                }, this)
+                                                            ]
+                                                        }, void 0, true, {
+                                                            fileName: "[project]/src/app/prices/page.js",
+                                                            lineNumber: 289,
+                                                            columnNumber: 19
+                                                        }, this),
+                                                        errors.schoolPaymentPercent && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                                            className: "mt-1 text-sm text-red-600",
+                                                            children: errors.schoolPaymentPercent.message
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/src/app/prices/page.js",
+                                                            lineNumber: 301,
+                                                            columnNumber: 21
+                                                        }, this),
+                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                                            className: "mt-2 text-xs text-gray-500",
+                                                            children: "Share of parent-paid amount given to school"
+                                                        }, void 0, false, {
+                                                            fileName: "[project]/src/app/prices/page.js",
+                                                            lineNumber: 305,
+                                                            columnNumber: 19
+                                                        }, this)
+                                                    ]
+                                                }, void 0, true, {
+                                                    fileName: "[project]/src/app/prices/page.js",
+                                                    lineNumber: 288,
+                                                    columnNumber: 17
+                                                }, this)
+                                            ]
+                                        }, void 0, true, {
+                                            fileName: "[project]/src/app/prices/page.js",
+                                            lineNumber: 284,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1028,12 +1132,12 @@ function PricesPage() {
                                                         children: "Price for One Box"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/prices/page.js",
-                                                        lineNumber: 275,
+                                                        lineNumber: 314,
                                                         columnNumber: 19
                                                     }, this)
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/prices/page.js",
-                                                    lineNumber: 274,
+                                                    lineNumber: 313,
                                                     columnNumber: 17
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1046,7 +1150,7 @@ function PricesPage() {
                                                                     className: "absolute left-3 top-2.5 h-4 w-4 text-gray-400"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/app/prices/page.js",
-                                                                    lineNumber: 279,
+                                                                    lineNumber: 318,
                                                                     columnNumber: 21
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -1057,13 +1161,13 @@ function PricesPage() {
                                                                     className: "pl-9 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm text-sm text-gray-900"
                                                                 }, void 0, false, {
                                                                     fileName: "[project]/src/app/prices/page.js",
-                                                                    lineNumber: 280,
+                                                                    lineNumber: 319,
                                                                     columnNumber: 21
                                                                 }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/app/prices/page.js",
-                                                            lineNumber: 278,
+                                                            lineNumber: 317,
                                                             columnNumber: 19
                                                         }, this),
                                                         errors.boxPrice && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1071,59 +1175,100 @@ function PricesPage() {
                                                             children: errors.boxPrice.message
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/app/prices/page.js",
-                                                            lineNumber: 289,
+                                                            lineNumber: 328,
                                                             columnNumber: 21
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                                            className: "mt-3 flex items-center justify-between text-sm",
+                                                            className: "mt-3 space-y-1.5 text-sm",
                                                             children: [
-                                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                                                    className: "text-gray-500",
-                                                                    children: "With GST + Service Charge:"
-                                                                }, void 0, false, {
-                                                                    fileName: "[project]/src/app/prices/page.js",
-                                                                    lineNumber: 292,
-                                                                    columnNumber: 21
-                                                                }, this),
-                                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                                                    className: "font-semibold text-gray-900",
+                                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                                    className: "flex items-center justify-between",
                                                                     children: [
-                                                                        "₹",
-                                                                        (Number(formValues.boxPrice || 0) * totalMultiplier).toFixed(2)
+                                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                                            className: "text-gray-500",
+                                                                            children: "With GST + Service Charge:"
+                                                                        }, void 0, false, {
+                                                                            fileName: "[project]/src/app/prices/page.js",
+                                                                            lineNumber: 332,
+                                                                            columnNumber: 23
+                                                                        }, this),
+                                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                                            className: "font-semibold text-gray-900",
+                                                                            children: [
+                                                                                "₹",
+                                                                                (Number(formValues.boxPrice || 0) * totalMultiplier).toFixed(2)
+                                                                            ]
+                                                                        }, void 0, true, {
+                                                                            fileName: "[project]/src/app/prices/page.js",
+                                                                            lineNumber: 333,
+                                                                            columnNumber: 23
+                                                                        }, this)
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/src/app/prices/page.js",
-                                                                    lineNumber: 293,
+                                                                    lineNumber: 331,
+                                                                    columnNumber: 21
+                                                                }, this),
+                                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                                    className: "flex items-center justify-between",
+                                                                    children: [
+                                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                                            className: "text-gray-500",
+                                                                            children: [
+                                                                                "School share (",
+                                                                                (_formValues_schoolPaymentPercent = formValues.schoolPaymentPercent) !== null && _formValues_schoolPaymentPercent !== void 0 ? _formValues_schoolPaymentPercent : 2,
+                                                                                "%):"
+                                                                            ]
+                                                                        }, void 0, true, {
+                                                                            fileName: "[project]/src/app/prices/page.js",
+                                                                            lineNumber: 338,
+                                                                            columnNumber: 23
+                                                                        }, this),
+                                                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                                            className: "font-medium text-gray-900",
+                                                                            children: [
+                                                                                "₹",
+                                                                                (Number(formValues.boxPrice || 0) * totalMultiplier * (Number(formValues.schoolPaymentPercent || 0) / 100)).toFixed(2)
+                                                                            ]
+                                                                        }, void 0, true, {
+                                                                            fileName: "[project]/src/app/prices/page.js",
+                                                                            lineNumber: 339,
+                                                                            columnNumber: 23
+                                                                        }, this)
+                                                                    ]
+                                                                }, void 0, true, {
+                                                                    fileName: "[project]/src/app/prices/page.js",
+                                                                    lineNumber: 337,
                                                                     columnNumber: 21
                                                                 }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/app/prices/page.js",
-                                                            lineNumber: 291,
+                                                            lineNumber: 330,
                                                             columnNumber: 19
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/app/prices/page.js",
-                                                    lineNumber: 277,
+                                                    lineNumber: 316,
                                                     columnNumber: 17
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/app/prices/page.js",
-                                            lineNumber: 273,
+                                            lineNumber: 312,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/app/prices/page.js",
-                                    lineNumber: 223,
+                                    lineNumber: 234,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/app/prices/page.js",
-                            lineNumber: 175,
+                            lineNumber: 186,
                             columnNumber: 11
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1138,7 +1283,7 @@ function PricesPage() {
                                             className: "animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/prices/page.js",
-                                            lineNumber: 311,
+                                            lineNumber: 358,
                                             columnNumber: 19
                                         }, this),
                                         "Saving..."
@@ -1149,7 +1294,7 @@ function PricesPage() {
                                             className: "mr-2 h-4 w-4"
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/prices/page.js",
-                                            lineNumber: 316,
+                                            lineNumber: 363,
                                             columnNumber: 19
                                         }, this),
                                         " Save Pricing"
@@ -1157,29 +1302,29 @@ function PricesPage() {
                                 }, void 0, true)
                             }, void 0, false, {
                                 fileName: "[project]/src/app/prices/page.js",
-                                lineNumber: 304,
+                                lineNumber: 351,
                                 columnNumber: 13
                             }, this)
                         }, void 0, false, {
                             fileName: "[project]/src/app/prices/page.js",
-                            lineNumber: 303,
+                            lineNumber: 350,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/app/prices/page.js",
-                    lineNumber: 174,
+                    lineNumber: 185,
                     columnNumber: 9
                 }, this)
             ]
         }, void 0, true, {
             fileName: "[project]/src/app/prices/page.js",
-            lineNumber: 150,
+            lineNumber: 160,
             columnNumber: 7
         }, this)
     }, void 0, false, {
         fileName: "[project]/src/app/prices/page.js",
-        lineNumber: 149,
+        lineNumber: 159,
         columnNumber: 5
     }, this);
 }

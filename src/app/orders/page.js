@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { 
   Search, 
@@ -22,12 +22,22 @@ import {
 } from "lucide-react";
 import Layout from "../../components/Layout";
 import { useSelector, useDispatch } from "react-redux";
-import { setOrders, setOrdersLoading, setOrdersError, clearOrdersError } from "../../store/slices/apiSlice";
-import axios from "axios";
-import { formatTableDate, formatDetailDate } from "../../utils/dateUtils";
-
+import {
+  setOrders,
+  setOrdersLoading,
+  setOrdersError,
+  clearOrdersError,
+} from "../../store/slices/apiSlice";
+import { fetchOrders,setActiveTab } from "@/store/slices/ordersSlice";
+import { formatTableDate } from "../../utils/dateUtils";
+import { Tabs, Tab } from "@/components/tabs";
+import PaySchoolModal from "@/components/PaySchoolModal";
 export default function OrdersPage() {
   const router = useRouter();
+  const dispatch = useDispatch();
+
+  const orders = useSelector((state) => state.orders?.allOrders);
+const {loading} = useSelector((state) => state.orders);
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [paymentStatusFilter, setPaymentStatusFilter] = useState("all");
@@ -37,110 +47,60 @@ export default function OrdersPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [ordersPerPage] = useState(10);
   const [showFilters, setShowFilters] = useState(false);
+ const activeTab = useSelector((state) => state.orders.activeTab);
+  const filters = useSelector((state) => state.orders.filters);
+  const [search, setSearch] = useState(filters.search);
   const [mounted, setMounted] = useState(false);
-
-  const dispatch = useDispatch();
-  const { orders } = useSelector((state) => state.api);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  const [open, setOpen] = useState(false);
+  const [selectedOrder, setSelectedOrder] = useState(null);
+  useEffect(() => setMounted(true), []);
 
   useEffect(() => {
-    if (mounted) {
-      fetchOrders();
-    }
-  }, [mounted, currentPage, statusFilter, paymentStatusFilter, orderTypeFilter, startDate, endDate]);
+    if (mounted) loadOrders();
+  }, [
+    mounted,
+    currentPage,
+    statusFilter,
+    paymentStatusFilter,
+    orderTypeFilter,
+    startDate,
+    endDate,
+    activeTab 
+  ]);
 
-  const fetchOrders = async () => {
+  const loadOrders = async () => {
     try {
       dispatch(setOrdersLoading(true));
       dispatch(clearOrdersError());
 
-      const token = localStorage.getItem('adminToken');
-      
-      // Build query parameters
       const params = {
         page: currentPage,
         limit: ordersPerPage,
-        search: searchTerm || undefined
+        search: searchTerm || undefined,
+        // status: statusFilter !== "all" ? statusFilter : undefined,
+        status: activeTab === "active" ? "active" : "completed",
+        paymentStatus: paymentStatusFilter !== "all" ? paymentStatusFilter : undefined,
+        orderType: orderTypeFilter !== "all" ? orderTypeFilter : undefined,
+        startDate: startDate || undefined,
+        endDate: endDate || undefined,
+        schoolOpened: true,
       };
 
-      // Add filters
-      if (statusFilter !== "all") {
-        params.status = statusFilter;
-      }
-      if (paymentStatusFilter !== "all") {
-        params.paymentStatus = paymentStatusFilter;
-      }
-      if (orderTypeFilter !== "all") {
-        params.orderType = orderTypeFilter;
-      }
-      if (startDate) {
-        params.startDate = startDate;
-      }
-      if (endDate) {
-        params.endDate = endDate;
-      }
+      const result = await dispatch(fetchOrders(params)).unwrap();
 
-      const response = await axios.get(`https://api.middaybox.com/api/admin/orders`, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        },
-        params
-      });
-
-      const { orders: ordersData, pagination } = response.data;
-      
-      dispatch(setOrders({
-        orders: ordersData,
-        pagination: {
-          currentPage: pagination.currentPage,
-          totalPages: pagination.totalPages,
-          totalOrders: pagination.totalOrders,
-          hasNextPage: pagination.hasNextPage,
-          hasPrevPage: pagination.hasPrevPage,
-          itemsPerPage: pagination.itemsPerPage,
-          showingFrom: pagination.showingFrom,
-          showingTo: pagination.showingTo,
-        }
-      }));
+      dispatch(
+        setOrders({
+          orders: result.orders,
+          pagination: result.pagination,
+        })
+      );
     } catch (error) {
-      console.error('Error fetching orders:', error);
-      dispatch(setOrdersError('Failed to load orders'));
-      
-      // Fallback to mock data if API fails
+      console.error("Error fetching orders:", error);
+      dispatch(setOrdersError("Failed to load orders"));
+
+      // fallback mock
       const mockData = {
         orders: [
-          {
-            _id: "1",
-            orderNumber: "LUNCH202501150001",
-            parentId: {
-              _id: "1",
-              name: "John Doe",
-              email: "john@example.com",
-              mobile: "9876543210"
-            },
-            schoolId: {
-              _id: "1",
-              schoolName: "ABC International School"
-            },
-            deliveryBoyId: {
-              _id: "1",
-              name: "Rahul Kumar",
-              mobile: "9876543211"
-            },
-            orderType: "15_days",
-            startDate: "2025-01-15T00:00:00.000Z",
-            endDate: "2025-01-30T00:00:00.000Z",
-            deliveryTime: "12:30",
-            distance: 6.4,
-            totalAmount: 855,
-            status: "active",
-            paymentStatus: "paid",
-            paymentMethod: "online",
-            createdAt: "2025-01-15T10:30:00.000Z"
-          }
         ],
         pagination: {
           currentPage: 1,
@@ -148,12 +108,9 @@ export default function OrdersPage() {
           totalOrders: 1,
           hasNextPage: false,
           hasPrevPage: false,
-          itemsPerPage: 10,
-          showingFrom: 1,
-          showingTo: 1,
-        }
+        },
       };
-      
+
       dispatch(setOrders(mockData));
     } finally {
       dispatch(setOrdersLoading(false));
@@ -164,38 +121,33 @@ export default function OrdersPage() {
     setSearchTerm(e.target.value);
     setCurrentPage(1);
   };
+// const orders?.orders = useMemo(() => {
+//     let data = orders?.orders || [];
+//     console.log(orders,'orders in completed page');
+    
+//     // Filter by tab
+//     if (activeTab === "active") {
+//       data = data?.filter((o) => o.status !== "completed");
+//     } else {
+//       data = data?.filter((o) => o.status === "completed");
+//     }
 
-  const handleFilterChange = (filterType, value) => {
-    switch (filterType) {
-      case 'status':
-        setStatusFilter(value);
-        break;
-      case 'paymentStatus':
-        setPaymentStatusFilter(value);
-        break;
-      case 'orderType':
-        setOrderTypeFilter(value);
-        break;
-    }
-    setCurrentPage(1);
-  };
+//     // Search filter
+//     if (search.trim()) {
+//       data = data.filter((o) =>
+//         o.customerName?.toLowerCase().includes(search.toLowerCase())
+//       );
+//     }
 
-  const handleDateFilter = () => {
-    setCurrentPage(1);
-    fetchOrders();
-  };
-
-  const handlePageChange = (page) => {
-    setCurrentPage(page);
-  };
-
+//     return data;
+//   }, [orders, activeTab, search]);
   const clearFilters = () => {
+    setSearchTerm("");
     setStatusFilter("all");
     setPaymentStatusFilter("all");
     setOrderTypeFilter("all");
     setStartDate("");
     setEndDate("");
-    setSearchTerm("");
     setCurrentPage(1);
   };
 
@@ -203,7 +155,7 @@ export default function OrdersPage() {
     router.push(`/orders/${order._id}`);
   };
 
-  const StatusBadge = ({ status }) => {
+ const StatusBadge = ({ status }) => {
     const statusConfig = {
       "active": { color: "bg-blue-100 text-blue-800", icon: Clock, label: "Active" },
       "completed": { color: "bg-green-100 text-green-800", icon: CheckCircle, label: "Completed" },
@@ -221,7 +173,33 @@ export default function OrdersPage() {
       </span>
     );
   };
+   const PayForSchoolStatusBadge = ({ status }) => {
+  const statusConfig = {
+    pending: {
+      color: "bg-yellow-100 text-yellow-800",
+      icon: Clock,
+      label: "Pending"
+    },
+    completed: {
+      color: "bg-green-100 text-green-800",
+      icon: CheckCircle,
+      label: "Completed"
+    }
+  };
 
+  const config = statusConfig[status] || statusConfig.pending;
+  const Icon = config.icon;
+
+  return (
+    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${config.color}`}>
+      <Icon className="mr-1 h-3 w-3" />
+      {config.label}
+    </span>
+  );
+};
+const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
   const PaymentStatusBadge = ({ status }) => {
     const statusConfig = {
       "paid": { color: "bg-green-100 text-green-800", label: "Paid" },
@@ -240,6 +218,7 @@ export default function OrdersPage() {
 
   const OrderTypeBadge = ({ type }) => {
     const typeConfig = {
+      "today": { color: "bg-green-100 text-green-800", label: "Today" },
       "15_days": { color: "bg-blue-100 text-blue-800", label: "15 Days" },
       "30_days": { color: "bg-purple-100 text-purple-800", label: "30 Days" },
       "7_days": { color: "bg-orange-100 text-orange-800", label: "7 Days" },
@@ -263,6 +242,11 @@ export default function OrdersPage() {
       </Layout>
     );
   }
+  const handlePayForSchool = async(order) => {
+    await setOpen(true)
+    await setSelectedOrder(order)
+  }
+console.log(orders, 'orders.pagination');
 
   return (
     <Layout>
@@ -271,12 +255,14 @@ export default function OrdersPage() {
           <h1 className="text-2xl font-bold text-gray-900">Orders Management</h1>
           <p className="text-gray-600">View and manage all delivery orders</p>
         </div>
-
+    <div>
+   
+    </div>
         {/* Search and Filters */}
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
             <div className="flex flex-col sm:flex-row gap-4 flex-1">
-              <div className="relative flex-1">
+              {/* <div className="relative flex-1">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                   <Search className="h-5 w-5 text-gray-400" />
                 </div>
@@ -285,16 +271,20 @@ export default function OrdersPage() {
                   placeholder="Search orders by order number, parent name, or school..."
                   value={searchTerm}
                   onChange={handleSearch}
-                  className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                  className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-900 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                 />
-              </div>
-              
+              </div> */}
+               
               <button
                 onClick={() => setShowFilters(!showFilters)}
-                className="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                className={`inline-flex items-center px-4 py-2 border text-sm font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200 ${
+                  showFilters
+                    ? 'border-blue-500 text-blue-700 bg-blue-50 hover:bg-blue-100'
+                    : 'border-gray-300 text-gray-700 bg-white hover:bg-gray-50'
+                }`}
               >
                 <Filter className="h-4 w-4 mr-2" />
-                Filters
+                {showFilters ? 'Hide Filters' : 'Show Filters'}
               </button>
             </div>
           </div>
@@ -302,14 +292,17 @@ export default function OrdersPage() {
           {/* Advanced Filters */}
           {showFilters && (
             <div className="mt-6 pt-6 border-t border-gray-200">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {/* Status Filter */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Status</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <Clock className="inline h-4 w-4 mr-1" />
+                    Status
+                  </label>
                   <select
                     value={statusFilter}
                     onChange={(e) => handleFilterChange('status', e.target.value)}
-                    className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                    className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm text-gray-900"
                   >
                     <option value="all">All Status</option>
                     <option value="active">Active</option>
@@ -321,11 +314,14 @@ export default function OrdersPage() {
 
                 {/* Payment Status Filter */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Payment Status</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <DollarSign className="inline h-4 w-4 mr-1" />
+                    Payment Status
+                  </label>
                   <select
                     value={paymentStatusFilter}
                     onChange={(e) => handleFilterChange('paymentStatus', e.target.value)}
-                    className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                    className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm text-gray-900"
                   >
                     <option value="all">All Payment Status</option>
                     <option value="paid">Paid</option>
@@ -336,11 +332,14 @@ export default function OrdersPage() {
 
                 {/* Order Type Filter */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Order Type</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <Package className="inline h-4 w-4 mr-1" />
+                    Order Type
+                  </label>
                   <select
                     value={orderTypeFilter}
                     onChange={(e) => handleFilterChange('orderType', e.target.value)}
-                    className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                    className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm text-gray-900"
                   >
                     <option value="all">All Types</option>
                     <option value="7_days">7 Days</option>
@@ -349,31 +348,65 @@ export default function OrdersPage() {
                   </select>
                 </div>
 
+                {/* School Filter */}
+                {/* <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <School className="inline h-4 w-4 mr-1" />
+                    School
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="Search by school name..."
+                    value={schoolFilter}
+                    onChange={(e) => handleFilterChange('school', e.target.value)}
+                    className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm text-gray-900"
+                  />
+                </div> */}
+
+                {/* Parent Filter */}
+                {/* <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <User className="inline h-4 w-4 mr-1" />
+                    Parent
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="Search by parent name..."
+                    value={parentFilter}
+                    onChange={(e) => handleFilterChange('parent', e.target.value)}
+                    className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm text-gray-900"
+                  />
+                </div> */}
+
                 {/* Date Range */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Date Range</label>
+                <div className="md:col-span-2 lg:col-span-3">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <Calendar className="inline h-4 w-4 mr-1" />
+                    Date Range
+                  </label>
                   <div className="flex gap-2">
                     <input
                       type="date"
                       value={startDate}
                       onChange={(e) => setStartDate(e.target.value)}
-                      className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                      className="block flex-1 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm text-gray-900"
                     />
                     <input
                       type="date"
                       value={endDate}
                       onChange={(e) => setEndDate(e.target.value)}
-                      className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                      className="block flex-1 px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm text-gray-900"
                     />
                   </div>
                 </div>
               </div>
 
-              <div className="mt-4 flex justify-end">
+              <div className="mt-6 flex justify-end">
                 <button
                   onClick={clearFilters}
-                  className="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                  className="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200"
                 >
+                  <Filter className="h-4 w-4 mr-2" />
                   Clear Filters
                 </button>
               </div>
@@ -382,7 +415,7 @@ export default function OrdersPage() {
         </div>
 
         {/* Error Message */}
-        {orders.error && (
+        {/* {orders.error && (
           <div className="bg-red-50 border border-red-200 rounded-md p-4">
             <div className="flex">
               <div className="flex-shrink-0">
@@ -393,10 +426,20 @@ export default function OrdersPage() {
               </div>
             </div>
           </div>
-        )}
+        )} */}
 
         {/* Orders Table */}
-        <div className="bg-white shadow-sm border border-gray-200 rounded-lg overflow-hidden">
+        <div className="bg-white shadow-sm border border-gray-200 rounded-lg overflow-hidden pt-2">
+          <Tabs
+                active={activeTab}
+                onChange={(val) => {
+                  setCurrentPage(1);
+                  dispatch(setActiveTab(val));
+                }}
+              >
+                <Tab label="Active Orders" value="active" />
+                <Tab label="Completed Orders" value="completed" />
+              </Tabs>
           <div className="overflow-x-auto">
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
@@ -406,13 +449,14 @@ export default function OrdersPage() {
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">School</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Delivery</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Pay For School</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Created</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {orders.loading ? (
+                {loading ? (
                   // Loading skeleton
                   Array.from({ length: 5 }).map((_, index) => (
                     <tr key={index} className="animate-pulse">
@@ -443,7 +487,7 @@ export default function OrdersPage() {
                       </td>
                     </tr>
                   ))
-                ) : orders.orders.length === 0 ? (
+                ) : orders?.orders?.length === 0 ? (
                   <tr>
                     <td colSpan={8} className="px-6 py-12 text-center">
                       <div className="text-gray-500">
@@ -454,7 +498,7 @@ export default function OrdersPage() {
                     </td>
                   </tr>
                 ) : (
-                  orders.orders.map((order) => (
+                  orders?.orders?.map((order) => (
                     <tr key={order._id} className="hover:bg-gray-50">
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center">
@@ -472,12 +516,12 @@ export default function OrdersPage() {
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-900">{order.parentId.name}</div>
-                        <div className="text-sm text-gray-500">{order.parentId.mobile}</div>
+                        <div className="text-sm text-gray-900">{order?.parentId?.name}</div>
+                        <div className="text-sm text-gray-500">{order?.parentId?.mobile}</div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-900">{order.schoolId?.schoolName}</div>
-                        <div className="text-sm text-gray-500">{order.schoolId?.cityName}</div>
+                        <div className="text-sm text-gray-900">{order.schoolRegistrationId?.schoolName}</div>
+                        <div className="text-sm text-gray-500">{order.schoolRegistrationId?.schoolUniqueId}</div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="text-sm text-gray-900">
@@ -492,6 +536,10 @@ export default function OrdersPage() {
                         <PaymentStatusBadge status={order.paymentStatus} />
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
+                        {/* <div className="text-sm font-medium text-gray-900">{order.payForSchool}</div> */}
+                        <PayForSchoolStatusBadge status={order.payForSchool} />
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
                         <StatusBadge status={order.status} />
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
@@ -502,12 +550,17 @@ export default function OrdersPage() {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                         <div className="flex items-center space-x-2">
-                          <button onClick={() => handleViewDetails(order)} className="text-blue-600 hover:text-blue-900" title="View Details">
-                            <Eye className="h-4 w-4" />
+                          <button onClick={() => handleViewDetails(order)} className="bg-blue-600 text-xs text-white p-2 rounded-md hover:text-white" title="View Details">
+                            View Details
                           </button>
-                          <button className="text-gray-400 hover:text-gray-600">
+                          {order.status === 'completed' && order.payForSchool === 'pending' &&
+                          <button onClick={() => handlePayForSchool(order)} className="bg-green-600 text-xs text-white p-2 rounded-md hover:text-white" title="Pay for School">
+                            Pay for School
+                          </button>}
+                          
+                          {/* <button className="text-gray-400 hover:text-gray-600">
                             <MoreHorizontal className="h-4 w-4" />
-                          </button>
+                          </button> */}
                         </div>
                       </td>
                     </tr>
@@ -519,7 +572,7 @@ export default function OrdersPage() {
         </div>
 
         {/* Pagination */}
-        {!orders.loading && orders.orders.length > 0 && (
+        {!orders.loading && orders?.orders?.length > 0 && (
           <div className="flex items-center justify-between">
             <div className="flex-1 flex justify-between sm:hidden">
               <button
@@ -580,6 +633,11 @@ export default function OrdersPage() {
           </div>
         )}
       </div>
+      <PaySchoolModal
+        open={open}
+        setOpen={setOpen}
+        selectedOrderId={selectedOrder}
+      />
     </Layout>
   );
-} 
+}

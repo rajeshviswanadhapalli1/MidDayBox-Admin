@@ -31,6 +31,12 @@ const schema = yup
       .min(0, "Service charge cannot be negative")
       .max(100, "Service charge cannot exceed 100%")
       .required("Service charge is required"),
+    schoolPaymentPercent: yup
+      .number()
+      .typeError("School payment must be a number")
+      .min(0, "School payment cannot be negative")
+      .max(100, "School payment cannot exceed 100%")
+      .required("School payment percent is required"),
     boxPrice: yup
       .number()
       .typeError("Price for one box must be a number")
@@ -68,6 +74,7 @@ export default function PricesPage() {
     defaultValues: {
       gstPercent: 3,
       serviceChargePercent: 2,
+      schoolPaymentPercent: 2,
       boxPrice: 25,
       tiers: DEFAULT_TIERS,
     },
@@ -89,6 +96,7 @@ export default function PricesPage() {
         let normalized = {
           gstPercent: 3,
           serviceChargePercent: 2,
+          schoolPaymentPercent: 2,
           boxPrice: 25,
           tiers: DEFAULT_TIERS,
         };
@@ -96,12 +104,14 @@ export default function PricesPage() {
         if (data) {
           if (typeof data.gstPercent === "number") normalized.gstPercent = data.gstPercent;
           if (typeof data.serviceChargePercent === "number") normalized.serviceChargePercent = data.serviceChargePercent;
+          if (typeof data.schoolPaymentPercent === "number") normalized.schoolPaymentPercent = data.schoolPaymentPercent;
           if (typeof data.boxPrice === "number") normalized.boxPrice = data.boxPrice;
           if (Array.isArray(data.tiers) && data.tiers.length > 0) normalized.tiers = data.tiers;
 
           if (data.pricing) {
             if (typeof data.pricing.gstPercent === "number") normalized.gstPercent = data.pricing.gstPercent;
             if (typeof data.pricing.serviceChargePercent === "number") normalized.serviceChargePercent = data.pricing.serviceChargePercent;
+            if (typeof data.pricing.schoolPaymentPercent === "number") normalized.schoolPaymentPercent = data.pricing.schoolPaymentPercent;
             if (typeof data.pricing.boxPrice === "number") normalized.boxPrice = data.pricing.boxPrice;
             if (Array.isArray(data.pricing.tiers)) normalized.tiers = data.pricing.tiers;
           }
@@ -161,6 +171,7 @@ export default function PricesPage() {
               reset({
                 gstPercent: 3,
                 serviceChargePercent: 2,
+                schoolPaymentPercent: 2,
                 boxPrice: 25,
                 tiers: DEFAULT_TIERS,
               })
@@ -269,6 +280,34 @@ export default function PricesPage() {
                 </div>
               </div>
 
+              {/* School Payment Percent */}
+              <div className="bg-white rounded-lg shadow-sm border border-gray-200">
+                <div className="p-6 border-b border-gray-100">
+                  <h3 className="text-lg font-medium text-gray-900">School Payment (%)</h3>
+                </div>
+                <div className="p-6">
+                  <div className="relative">
+                    <Percent className="absolute left-3 top-2.5 h-4 w-4 text-gray-400" />
+                    <input
+                      {...register("schoolPaymentPercent")}
+                      type="number"
+                      min="0"
+                      max="100"
+                      step="0.01"
+                      className="pl-9 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm text-sm text-gray-900"
+                    />
+                  </div>
+                  {errors.schoolPaymentPercent && (
+                    <p className="mt-1 text-sm text-red-600">
+                      {errors.schoolPaymentPercent.message}
+                    </p>
+                  )}
+                  <p className="mt-2 text-xs text-gray-500">
+                    Share of parent-paid amount given to school
+                  </p>
+                </div>
+              </div>
+
               {/* Box Price */}
               <div className="bg-white rounded-lg shadow-sm border border-gray-200">
                 <div className="p-6 border-b border-gray-100">
@@ -288,11 +327,19 @@ export default function PricesPage() {
                   {errors.boxPrice && (
                     <p className="mt-1 text-sm text-red-600">{errors.boxPrice.message}</p>
                   )}
-                  <div className="mt-3 flex items-center justify-between text-sm">
-                    <span className="text-gray-500">With GST + Service Charge:</span>
-                    <span className="font-semibold text-gray-900">
-                      ₹{(Number(formValues.boxPrice || 0) * totalMultiplier).toFixed(2)}
-                    </span>
+                  <div className="mt-3 space-y-1.5 text-sm">
+                    <div className="flex items-center justify-between">
+                      <span className="text-gray-500">With GST + Service Charge:</span>
+                      <span className="font-semibold text-gray-900">
+                        ₹{(Number(formValues.boxPrice || 0) * totalMultiplier).toFixed(2)}
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-gray-500">School share ({formValues.schoolPaymentPercent ?? 2}%):</span>
+                      <span className="font-medium text-gray-900">
+                        ₹{(Number(formValues.boxPrice || 0) * totalMultiplier * (Number(formValues.schoolPaymentPercent || 0) / 100)).toFixed(2)}
+                      </span>
+                    </div>
                   </div>
                 </div>
               </div>

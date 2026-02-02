@@ -14,15 +14,18 @@ import {
   LogOut,
   TrendingUp,
   UserCheck,
-  School
+  School,
+  Receipt
 } from "lucide-react";
 
 const navigation = [
   { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
   { name: "Users", href: "/users", icon: Users },
   { name: "Orders", href: "/orders", icon: Package },
+  // { name: "Completed Orders", href: "/completedOrders", icon: Package },
   { name: "Prices", href: "/prices", icon: DollarSign },
   { name: "Schools", href: "/schools", icon: School },
+  { name: "Transactions", href: "/transactions", icon: Receipt },
   { name: "Feedbacks", href: "/feedbacks", icon: TrendingUp }, 
 ];
 

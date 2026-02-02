@@ -51,6 +51,20 @@ export const schoolsAPI = {
   deleteSchool: (id) => api.delete(`/admin/schools/${id}`),
 };
 
+// School payment API – admin (schoolPaymentPercent from pricing)
+export const schoolPaymentAPI = {
+  getPendingSchoolPayments: (params) =>
+    api.get('/admin/pending-school-payments', { params }),
+  recordSchoolPayment: (payload) =>
+    api.post('/admin/record-school-payment', payload),
+};
+
+// Admin transactions (parent + school)
+export const transactionsAPI = {
+  getTransactions: (params) =>
+    api.get('/admin/transactions', { params }),
+};
+
 // Generic API helper
 export const apiHelper = {
   handleResponse: (response) => response.data,
