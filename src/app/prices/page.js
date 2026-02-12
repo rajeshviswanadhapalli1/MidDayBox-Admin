@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { Save, Plus, IndianRupee, Percent, Tag } from "lucide-react";
+import { Save, Plus, Trash2, IndianRupee, Percent, Tag } from "lucide-react";
 import Layout from "../../components/Layout";
 import { pricingAPI, apiHelper } from "../../services/apiService";
 import toast from "react-hot-toast";
@@ -80,7 +80,7 @@ export default function PricesPage() {
     },
   });
 
-  const { fields, append } = useFieldArray({ control, name: "tiers" });
+  const { fields, append, remove } = useFieldArray({ control, name: "tiers" });
   const formValues = watch();
 
   useEffect(() => {
@@ -162,7 +162,7 @@ export default function PricesPage() {
           <div>
             <h1 className="text-2xl font-bold text-gray-900">Pricing Management</h1>
             <p className="text-gray-600">
-              Define distance-based price tiers, per box, GST, and Service Charge
+              Define tiers (label & price), box price, GST, Service Charge, and School Payment %
             </p>
           </div>
           <button
@@ -187,23 +187,26 @@ export default function PricesPage() {
             {/* Left Side - Distance-based tiers */}
             <div className="xl:col-span-2 bg-white rounded-lg shadow-sm border border-gray-200">
               <div className="p-6 border-b border-gray-100">
-                <h3 className="text-lg font-medium text-gray-900">Distance-based Tiers</h3>
+                <h3 className="text-lg font-medium text-gray-900">Tiers</h3>
+                <p className="text-sm text-gray-500 mt-1">Edit labels and prices, add or remove tiers</p>
               </div>
 
               <div className="p-6 space-y-4">
                 {fields.map((field, index) => (
                   <div key={field.id} className="grid grid-cols-12 gap-3 items-center">
-                    <div className="col-span-6">
+                    <div className="col-span-5">
                       <div className="relative">
                         <Tag className="absolute left-3 top-2.5 h-4 w-4 text-gray-400" />
                         <input
                           {...register(`tiers.${index}.label`)}
                           type="text"
-                          disabled
-                          placeholder="e.g. 0-2 km"
+                          placeholder="e.g. 15 Days, 30 Days"
                           className="pl-9 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none text-sm text-gray-900"
                         />
                       </div>
+                      {errors.tiers?.[index]?.label && (
+                        <p className="mt-1 text-xs text-red-600">{errors.tiers[index].label.message}</p>
+                      )}
                     </div>
 
                     <div className="col-span-4">
@@ -217,6 +220,22 @@ export default function PricesPage() {
                           className="pl-9 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none text-sm text-gray-900"
                         />
                       </div>
+                      {errors.tiers?.[index]?.price && (
+                        <p className="mt-1 text-xs text-red-600">{errors.tiers[index].price.message}</p>
+                      )}
+                    </div>
+
+                    <div className="col-span-2">
+                      {fields.length > 1 && (
+                        <button
+                          type="button"
+                          onClick={() => remove(index)}
+                          className="p-2 text-red-600 hover:bg-red-50 rounded-md"
+                          title="Remove tier"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </button>
+                      )}
                     </div>
                   </div>
                 ))}
@@ -225,7 +244,7 @@ export default function PricesPage() {
                   onClick={() => append({ label: "", price: 0 })}
                   className="inline-flex items-center px-3 py-2 text-sm font-medium rounded-md border border-gray-300 text-gray-700 bg-white hover:bg-gray-50 mt-3"
                 >
-                  <Plus className="h-4 w-4 mr-2" /> Add Tier
+                  <Plus className="h-4 w-4 mr-2" /> Add New Tier
                 </button>
               </div>
             </div>
