@@ -1,46 +1,106 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
+import api, { API_BASE_URL } from '../../utils/axios';
+import * as tokenStorage from '../../utils/tokenStorage';
 
-// Helper function to safely get localStorage value
-const getStoredToken = () => {
-  if (typeof window !== 'undefined') {
-    return localStorage.getItem('adminToken');
-  }
-  return null;
+const getInitialAuth = () => {
+  const user = tokenStorage.getUser();
+  const token = tokenStorage.getAccessToken();
+  const hasSession = tokenStorage.hasSession();
+  return {
+    user,
+    token,
+    isAuthenticated: hasSession,
+  };
 };
 
-// Async thunk for login
+const initialAuth = getInitialAuth();
+
+// Restore session on app load using refresh token
+export const initializeAuth = createAsyncThunk(
+  'auth/initializeAuth',
+  async (_, { rejectWithValue }) => {
+    const refreshToken = tokenStorage.getRefreshToken();
+    const accessToken = tokenStorage.getAccessToken();
+
+    if (!refreshToken && !accessToken) {
+      return { user: null, token: null, authenticated: false };
+    }
+
+    if (refreshToken) {
+      try {
+        const response = await axios.post(`${API_BASE_URL}/admin/refresh`, {
+          refreshToken,
+        });
+        const data = response.data;
+        const newAccess = data.accessToken || data.token;
+        tokenStorage.saveTokens({
+          accessToken: newAccess,
+          refreshToken: data.refreshToken,
+        });
+        if (data.user) {
+          tokenStorage.saveUser(data.user);
+        }
+        return {
+          user: data.user || tokenStorage.getUser(),
+          token: newAccess,
+          authenticated: true,
+        };
+      } catch (error) {
+        tokenStorage.clearSession();
+        return rejectWithValue(
+          error.response?.data?.message || 'Session expired'
+        );
+      }
+    }
+
+    return {
+      user: tokenStorage.getUser(),
+      token: accessToken,
+      authenticated: true,
+    };
+  }
+);
+
 export const loginUser = createAsyncThunk(
   'auth/loginUser',
   async (credentials, { rejectWithValue }) => {
     try {
-      const response = await axios.post('https://api.middaybox.com/api/admin/login', credentials);
+      const response = await api.post('/admin/login', credentials);
       return response.data;
     } catch (error) {
-      return rejectWithValue(error.response?.data?.message || 'Login failed');
+      return rejectWithValue(
+        error.response?.data?.message || 'Login failed'
+      );
     }
   }
 );
 
-// Async thunk for logout
 export const logoutUser = createAsyncThunk(
   'auth/logoutUser',
   async (_, { rejectWithValue }) => {
+    const refreshToken = tokenStorage.getRefreshToken();
     try {
-      await axios.post('https://api.middaybox.com/api/admin/logout');
-      return null;
+      if (refreshToken) {
+        await api.post('/admin/logout', { refreshToken });
+      }
     } catch (error) {
-      return rejectWithValue('Logout failed');
+      // Still clear local session even if server logout fails
+      if (!refreshToken) {
+        return rejectWithValue('Logout failed');
+      }
+    } finally {
+      tokenStorage.clearSession();
     }
+    return null;
   }
 );
 
-// Async thunk for getting user profile
 export const getUserProfile = createAsyncThunk(
   'auth/getUserProfile',
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get('https://api.middaybox.com/api/admin/profile');
+      const response = await api.get('/admin/profile');
       return response.data;
     } catch (error) {
       return rejectWithValue('Failed to get user profile');
@@ -49,10 +109,11 @@ export const getUserProfile = createAsyncThunk(
 );
 
 const initialState = {
-  user: null,
-  token: getStoredToken(),
-  isAuthenticated: !!getStoredToken(),
-  loading: false,
+  user: initialAuth.user,
+  token: initialAuth.token,
+  isAuthenticated: initialAuth.isAuthenticated,
+  sessionReady: false,
+  loading: true,
   error: null,
 };
 
@@ -65,32 +126,55 @@ const authSlice = createSlice({
     },
     setToken: (state, action) => {
       state.token = action.payload;
-      state.isAuthenticated = !!action.payload;
-      if (typeof window !== 'undefined') {
-        if (action.payload) {
-          localStorage.setItem('adminToken', action.payload);
-        } else {
-          localStorage.removeItem('adminToken');
-        }
+      state.isAuthenticated = !!action.payload || !!tokenStorage.getRefreshToken();
+
+      if (!action.payload) {
+        state.user = null;
+        state.isAuthenticated = false;
+        tokenStorage.clearSession();
+      } else {
+        tokenStorage.saveTokens({ accessToken: action.payload });
       }
     },
   },
   extraReducers: (builder) => {
     builder
-      // Login
+      .addCase(initializeAuth.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(initializeAuth.fulfilled, (state, action) => {
+        state.loading = false;
+        state.sessionReady = true;
+        state.user = action.payload.user;
+        state.token = action.payload.token;
+        state.isAuthenticated = action.payload.authenticated;
+        state.error = null;
+      })
+      .addCase(initializeAuth.rejected, (state) => {
+        state.loading = false;
+        state.sessionReady = true;
+        state.user = null;
+        state.token = null;
+        state.isAuthenticated = false;
+      })
       .addCase(loginUser.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
       .addCase(loginUser.fulfilled, (state, action) => {
         state.loading = false;
-        state.user = action.payload.user;
-        state.token = action.payload.token;
+        state.sessionReady = true;
+        const payload = action.payload;
+        const accessToken = payload.accessToken || payload.token;
+        const refreshToken = payload.refreshToken;
+
+        state.user = payload.user;
+        state.token = accessToken;
         state.isAuthenticated = true;
         state.error = null;
-        if (typeof window !== 'undefined') {
-          localStorage.setItem('adminToken', action.payload.token);
-        }
+
+        tokenStorage.saveTokens({ accessToken, refreshToken });
+        tokenStorage.saveUser(payload.user);
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.loading = false;
@@ -99,7 +183,6 @@ const authSlice = createSlice({
         state.token = null;
         state.isAuthenticated = false;
       })
-      // Logout
       .addCase(logoutUser.pending, (state) => {
         state.loading = true;
       })
@@ -108,26 +191,24 @@ const authSlice = createSlice({
         state.user = null;
         state.token = null;
         state.isAuthenticated = false;
-        if (typeof window !== 'undefined') {
-          localStorage.removeItem('adminToken');
-        }
+        state.error = null;
       })
       .addCase(logoutUser.rejected, (state) => {
         state.loading = false;
         state.user = null;
         state.token = null;
         state.isAuthenticated = false;
-        if (typeof window !== 'undefined') {
-          localStorage.removeItem('adminToken');
-        }
       })
-      // Get User Profile
       .addCase(getUserProfile.pending, (state) => {
         state.loading = true;
       })
       .addCase(getUserProfile.fulfilled, (state, action) => {
         state.loading = false;
-        state.user = action.payload;
+        const profile = action.payload?.user || action.payload;
+        state.user = profile;
+        if (profile) {
+          tokenStorage.saveUser(profile);
+        }
       })
       .addCase(getUserProfile.rejected, (state, action) => {
         state.loading = false;
@@ -137,4 +218,4 @@ const authSlice = createSlice({
 });
 
 export const { clearError, setToken } = authSlice.actions;
-export default authSlice.reducer; 
+export default authSlice.reducer;

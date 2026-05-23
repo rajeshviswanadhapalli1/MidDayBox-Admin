@@ -8,6 +8,12 @@ import { Eye, EyeOff, Lock, Mail } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { loginUser, clearError } from "../../store/slices/authSlice";
+import { navigation } from "../../config/navigation";
+
+const normalizePermissionKey = (v) => {
+  if (!v) return "";
+  return String(v).trim().toLowerCase().replace(/\s+/g, "_").replace(/-+/g, "_");
+};
 
 const schema = yup.object({
   email: yup.string().email("Please enter a valid email").required("Email is required"),
@@ -19,7 +25,7 @@ export default function LoginPage() {
   const [mounted, setMounted] = useState(false);
   const router = useRouter();
   const dispatch = useDispatch();
-  const { loading, error, isAuthenticated } = useSelector((state) => state.auth);
+  const { loading, error, isAuthenticated, sessionReady, user } = useSelector((state) => state.auth);
   
   const {
     register,
@@ -34,10 +40,22 @@ export default function LoginPage() {
   }, []);
 
   useEffect(() => {
-    if (mounted && isAuthenticated) {
-      router.push("/dashboard");
+    if (mounted && sessionReady && isAuthenticated) {
+      const role = user?.role || "admin";
+      if (role === "sub_admin") {
+        const perms = new Set(
+          (Array.isArray(user?.permissions) ? user.permissions : [])
+            .map(normalizePermissionKey)
+            .filter(Boolean)
+        );
+        const firstAllowed =
+          navigation.find((i) => perms.has(normalizePermissionKey(i.permissionKey)))?.href || "/dashboard";
+        router.push(firstAllowed);
+      } else {
+        router.push("/dashboard");
+      }
     }
-  }, [isAuthenticated, router, mounted]);
+  }, [isAuthenticated, sessionReady, router, mounted, user]);
 
   useEffect(() => {
     // Clear any existing errors when component mounts
@@ -50,8 +68,8 @@ export default function LoginPage() {
     dispatch(loginUser(data));
   };
 
-  // Don't render form until mounted to prevent hydration mismatch
-  if (!mounted) {
+  // Don't render form until mounted and session restore finished
+  if (!mounted || !sessionReady) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
         <div className="text-center">

@@ -5,29 +5,16 @@ import { useRouter, usePathname } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { logoutUser } from "../store/slices/authSlice";
 import { 
-  LayoutDashboard, 
-  Users, 
-  Package, 
-  DollarSign, 
   Menu, 
   X, 
-  LogOut,
-  TrendingUp,
-  UserCheck,
-  School,
-  Receipt
+  LogOut
 } from "lucide-react";
+import { navigation } from "../config/navigation";
 
-const navigation = [
-  { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
-  { name: "Users", href: "/users", icon: Users },
-  { name: "Orders", href: "/orders", icon: Package },
-  // { name: "Completed Orders", href: "/completedOrders", icon: Package },
-  { name: "Prices", href: "/prices", icon: DollarSign },
-  { name: "Schools", href: "/schools", icon: School },
-  { name: "Transactions", href: "/transactions", icon: Receipt },
-  { name: "Feedbacks", href: "/feedbacks", icon: TrendingUp }, 
-];
+function normalizePermissionKey(v) {
+  if (!v) return "";
+  return String(v).trim().toLowerCase().replace(/\s+/g, "_").replace(/-+/g, "_");
+}
 
 export default function Layout({ children }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -35,21 +22,46 @@ export default function Layout({ children }) {
   const router = useRouter();
   const pathname = usePathname();
   const dispatch = useDispatch();
-  const { isAuthenticated, loading } = useSelector((state) => state.auth);
+  const { isAuthenticated, loading, sessionReady, user } = useSelector((state) => state.auth);
+
+  const role = user?.role || "admin";
+  const rawPerms = Array.isArray(user?.permissions) ? user.permissions : [];
+  const perms = new Set(rawPerms.map(normalizePermissionKey).filter(Boolean));
+
+  const navItems =
+    role === "sub_admin"
+      ? navigation.filter((i) => perms.has(normalizePermissionKey(i.permissionKey)))
+      : navigation;
+
+  useEffect(() => {
+    if (!mounted || loading || !isAuthenticated) return;
+    if (role !== "sub_admin") return;
+    if (pathname === "/login") return;
+
+    // Sub admins: prevent access to pages outside permissions
+    const allowedPrefixes = navItems.map((i) => i.href).filter(Boolean);
+    const isAllowed = allowedPrefixes.some((prefix) => pathname === prefix || pathname.startsWith(prefix + "/"));
+
+    if (!isAllowed) {
+      const fallback = navItems[0]?.href || "/dashboard";
+      router.push(fallback);
+    }
+  }, [mounted, loading, isAuthenticated, role, navItems, pathname, router]);
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
   useEffect(() => {
-    if (mounted && !loading && !isAuthenticated && pathname !== "/login") {
+    if (mounted && sessionReady && !loading && !isAuthenticated && pathname !== "/login") {
       router.push("/login");
     }
-  }, [isAuthenticated, loading, pathname, router, mounted]);
+  }, [isAuthenticated, loading, sessionReady, pathname, router, mounted]);
 
-  const handleLogout = () => {
-    dispatch(logoutUser());
-    router.push("/login");
+  const handleLogout = async () => {
+    setSidebarOpen(false);
+    await dispatch(logoutUser());
+    router.replace("/login");
   };
 
   // Don't render anything until mounted to prevent hydration mismatch
@@ -67,7 +79,7 @@ export default function Layout({ children }) {
     return children;
   }
 
-  if (!isAuthenticated) {
+  if (!sessionReady || loading || !isAuthenticated) {
     return (
       <div className="min-h-screen bg-gray-50">
         <div className="flex items-center justify-center h-screen">
@@ -93,7 +105,7 @@ export default function Layout({ children }) {
             </button>
           </div>
           <nav className="flex-1 space-y-1 px-2 py-4">
-            {navigation.map((item) => {
+            {navItems.map((item) => {
               const isActive = pathname === item.href;
               return (
                 <a
@@ -130,7 +142,7 @@ export default function Layout({ children }) {
             <h1 className="text-xl font-bold text-gray-900">Admin Dashboard</h1>
           </div>
           <nav className="flex-1 space-y-1 px-2 py-4">
-            {navigation.map((item) => {
+            {navItems.map((item) => {
               const isActive = pathname === item.href;
               return (
                 <a

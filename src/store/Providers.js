@@ -3,10 +3,12 @@
 import { Provider } from 'react-redux';
 import { store } from './store';
 import { Toaster } from 'react-hot-toast';
+import AuthInitializer from '../components/AuthInitializer';
 
 export function Providers({ children }) {
   return (
     <Provider store={store}>
+      <AuthInitializer>
       <Toaster position="top-right" toastOptions={{
         duration: 3000,
         style: { fontSize: '14px' },
@@ -14,6 +16,7 @@ export function Providers({ children }) {
         error: { iconTheme: { primary: '#dc2626', secondary: 'white' } },
       }} />
       {children}
+      </AuthInitializer>
     </Provider>
   );
 } 

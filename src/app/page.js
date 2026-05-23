@@ -6,7 +6,7 @@ import { useSelector } from "react-redux";
 
 export default function Home() {
   const router = useRouter();
-  const { isAuthenticated, loading } = useSelector((state) => state.auth);
+  const { isAuthenticated, loading, sessionReady } = useSelector((state) => state.auth);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -14,14 +14,14 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    if (mounted && !loading) {
+    if (mounted && sessionReady && !loading) {
       if (isAuthenticated) {
         router.push("/dashboard");
       } else {
         router.push("/login");
       }
     }
-  }, [isAuthenticated, loading, router, mounted]);
+  }, [isAuthenticated, loading, sessionReady, router, mounted]);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100">

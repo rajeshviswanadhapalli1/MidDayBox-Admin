@@ -1,9 +1,15 @@
 import api from '../utils/axios';
 
+import * as tokenStorage from '../utils/tokenStorage';
+
 // Auth API
 export const authAPI = {
   login: (credentials) => api.post('/admin/login', credentials),
-  logout: () => api.post('/admin/logout'),
+  logout: () => {
+    const refreshToken = tokenStorage.getRefreshToken();
+    return api.post('/admin/logout', refreshToken ? { refreshToken } : {});
+  },
+  refresh: (refreshToken) => api.post('/admin/refresh', { refreshToken }),
   getProfile: () => api.get('/admin/profile'),
 };
 
@@ -65,15 +71,18 @@ export const transactionsAPI = {
     api.get('/admin/transactions', { params }),
 };
 
+// Sub admins (permissions) API – admin
+export const subAdminsAPI = {
+  getSubAdmins: (params) => api.get('/admin/sub-admins', { params }),
+  createSubAdmin: (payload) => api.post('/admin/sub-admins', payload),
+  updateSubAdmin: (id, payload) => api.patch(`/admin/sub-admins/${id}`, payload),
+  deleteSubAdmin: (id) => api.delete(`/admin/sub-admins/${id}`),
+};
+
 // Generic API helper
 export const apiHelper = {
   handleResponse: (response) => response.data,
   handleError: (error) => {
-    if (error.response?.status === 401) {
-      // Handle unauthorized access
-      localStorage.removeItem('adminToken');
-      window.location.href = '/login';
-    }
     throw error;
   },
 }; 

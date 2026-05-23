@@ -5,16 +5,16 @@ import { useRouter } from 'next/navigation';
 import { useSelector } from 'react-redux';
 
 export default function ProtectedRoute({ children }) {
-  const { isAuthenticated, loading } = useSelector((state) => state.auth);
+  const { isAuthenticated, loading, sessionReady } = useSelector((state) => state.auth);
   const router = useRouter();
 
   useEffect(() => {
-    if (!loading && !isAuthenticated) {
+    if (sessionReady && !loading && !isAuthenticated) {
       router.push('/login');
     }
-  }, [isAuthenticated, loading, router]);
+  }, [isAuthenticated, loading, sessionReady, router]);
 
-  if (loading) {
+  if (!sessionReady || loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100">
         <div className="text-center">
