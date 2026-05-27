@@ -7,6 +7,7 @@ import {
   School,
   Receipt,
   Shield,
+  Video,
 } from "lucide-react";
 
 export const navigation = [
@@ -17,6 +18,7 @@ export const navigation = [
   { name: "Schools", href: "/schools", permissionKey: "schools", icon: School },
   { name: "Transactions", href: "/transactions", permissionKey: "transactions", icon: Receipt },
   { name: "Sub Admins", href: "/sub-admins", permissionKey: "sub_admins", icon: Shield },
+  { name: "Demo Videos", href: "/demo-videos", permissionKey: "demo_videos", icon: Video },
   { name: "Feedbacks", href: "/feedbacks", permissionKey: "feedbacks", icon: TrendingUp },
 ];
 

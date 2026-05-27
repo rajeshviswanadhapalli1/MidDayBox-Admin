@@ -71,6 +71,30 @@ export const transactionsAPI = {
     api.get('/admin/transactions', { params }),
 };
 
+const multipartConfig = {
+  maxContentLength: Infinity,
+  maxBodyLength: Infinity,
+  transformRequest: [
+    (data, headers) => {
+      if (data instanceof FormData) {
+        delete headers['Content-Type'];
+      }
+      return data;
+    },
+  ],
+};
+
+// Demo videos API – admin
+export const demoVideosAPI = {
+  list: (params) => api.get('/admin/demo-videos', { params }),
+  getById: (id) => api.get(`/admin/demo-videos/${id}`),
+  create: (formData) =>
+    api.post('/admin/demo-videos', formData, multipartConfig),
+  update: (id, formData) =>
+    api.patch(`/admin/demo-videos/${id}`, formData, multipartConfig),
+  delete: (id) => api.delete(`/admin/demo-videos/${id}`),
+};
+
 // Sub admins (permissions) API – admin
 export const subAdminsAPI = {
   getSubAdmins: (params) => api.get('/admin/sub-admins', { params }),
