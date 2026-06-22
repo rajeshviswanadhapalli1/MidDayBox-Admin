@@ -84,6 +84,17 @@ const multipartConfig = {
   ],
 };
 
+// Festival wishes API – admin
+export const festivalWishesAPI = {
+  list: (params) => api.get('/admin/festival-wishes', { params }),
+  getById: (id) => api.get(`/admin/festival-wishes/${id}`),
+  create: (formData) =>
+    api.post('/admin/festival-wishes', formData, multipartConfig),
+  update: (id, formData) =>
+    api.patch(`/admin/festival-wishes/${id}`, formData, multipartConfig),
+  delete: (id) => api.delete(`/admin/festival-wishes/${id}`),
+};
+
 // Demo videos API – admin
 export const demoVideosAPI = {
   list: (params) => api.get('/admin/demo-videos', { params }),
